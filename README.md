@@ -1,62 +1,48 @@
-# COMPSCI 235 Starter Repository for Assignment 2
-
+# CompSci 235 S2 2021: Sample COVID-19 Web Application
 
 ## Description
 
-This repository contains an implementation of the domain model from Assignment 1. 
-It contains unit tests which can be run through pytest. 
-It also contains a simple Flask application that renders content of a Book object instance from our domain model on a blank html page.
-
-Please note that this sample implementation from Assignment 1 contains a more comprehensive superset of tests compared with what we had as hidden tests on Coderunner. 
-Your domain model implementation may have to be extended to meet all test cases in the sample implementation, but you may also decide to remove or modify test cases as it suits you. 
-From here on you can choose if you want to use the provided domain model or your implementation, just make sure your chosen set of test cases always work with your implementation.
-
-
-## Python version
-
-Please use Python version 3.6 or newer versions for development. Some of the depending libraries of our web application do not support Python versions below 3.6!
-
+A Web application that demonstrates use of Python's Flask framework. The application makes use of libraries such as the Jinja templating library and WTForms. Architectural design patterns and principles including Repository, Dependency Inversion and Single Responsibility have been used to design the application. The application uses Flask Blueprints to maintain a separation of concerns between application functions. Testing includes unit and end-to-end testing using the pytest tool. 
 
 ## Installation
 
 **Installation via requirements.txt**
 
 ```shell
+$ cd 2021CompSci235-03-CovidWebApp
 $ py -3 -m venv venv
 $ venv\Scripts\activate
 $ pip install -r requirements.txt
 ```
 
-When using PyCharm for requirements installation, set the virtual environment using 'File'->'Settings' and select your project from the left menu. Select 'Project Interpreter', click on the gearwheel button and select 'Add'. Click the 'Existing environment' radio button to select the virtual environment. 
+When using PyCharm, set the virtual environment using 'File'->'Settings' and select 'Project:2021CompSci235-03-CovidWebApp' from the left menu. Select 'Project Interpreter', click on the gearwheel button and select 'Add'. Click the 'Existing environment' radio button to select the virtual environment. 
 
+## Execution
 
-## Testing with the pytest unit tests
+**Running the application**
 
-After you have configured pytest as the testing tool for PyCharm (File - Settings - Tools - Python Integrated Tools - Testing), you can then run tests from within PyCharm by right-clicking the tests folder and selecting "Run pytest in tests".
-
-Alternatively, from a terminal in the root folder of the project, you can also call 'python -m pytest tests' to run all the tests. PyCharm also provides a built-in terminal, which uses the configured virtual environment. 
-
-
-## Execution of the web application
-
-**Running the Flask application**
-
-From the project directory, and within the activated virtual environment (see *venv\Scripts\activate* above):
+From the *2021CompSci235-03-CovidWebApp* directory, and within the activated virtual environment (see *venv\Scripts\activate* above):
 
 ````shell
 $ flask run
 ```` 
 
-## Data sources 
 
-The data in the excerpt files were downloaded from (Comic & Graphic):
-https://sites.google.com/eng.ucsd.edu/ucsdbookgraph/home
+## Configuration
 
-On this webpage, you can find more books and authors in the same file format as in our excerpt, for example for different book genres. 
-These might be useful to extend your web application with more functionality.
+The *2021CompSci235-03-CovidWebApp/.env* file contains variable settings. They are set with appropriate values.
 
-We would like to acknowledge the authors of these papers for collecting the datasets by extracting them from Goodreads:
+* `FLASK_APP`: Entry point of the application (should always be `wsgi.py`).
+* `FLASK_ENV`: The environment in which to run the application (either `development` or `production`).
+* `SECRET_KEY`: Secret key used to encrypt session data.
+* `TESTING`: Set to False for running the application. Overridden and set to True automatically when testing the application.
+* `WTF_CSRF_SECRET_KEY`: Secret key used by the WTForm library.
 
-*Mengting Wan, Julian McAuley, "Item Recommendation on Monotonic Behavior Chains", in RecSys'18.*
 
-*Mengting Wan, Rishabh Misra, Ndapa Nakashole, Julian McAuley, "Fine-Grained Spoiler Detection from Large-Scale Review Corpora", in ACL'19.*
+## Testing
+
+After you have configured pytest as the testing tool for PyCharm (File - Settings - Tools - Python Integrated Tools - Testing), you can then run tests from within PyCharm by right clicking the tests folder and selecting "Run pytest in tests".
+
+Alternatively, from a terminal in the root folder of the project, you can also call 'python -m pytest tests' to run all the tests. PyCharm also provides a built-in terminal, which uses the configured virtual environment. 
+
+ 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Iterable
 
 
 class Publisher:
@@ -52,7 +52,7 @@ class Author:
 
         # Initialize author colleagues data structure with empty set.
         # We use a set so each unique author is only represented once.
-        self.__authors_this_one_has_worked_with = set()
+        self.__books: List[Book] = list()
 
     @property
     def unique_id(self) -> int:
@@ -74,12 +74,25 @@ class Author:
         else:
             raise ValueError
 
-    def add_coauthor(self, coauthor):
-        if isinstance(coauthor, self.__class__) and coauthor.unique_id != self.unique_id:
-            self.__authors_this_one_has_worked_with.add(coauthor)
+    @property
+    def books(self) -> List['Book']:
+        return self.__books
 
-    def check_if_this_author_coauthored_with(self, author):
-        return author in self.__authors_this_one_has_worked_with
+    def add_book(self, book: 'Book'):
+        if not isinstance(book, Book):
+            return
+
+        if book in self.__books:
+            return
+
+        self.__books.append(book)
+
+    def remove_book(self, book: 'Book'):
+        if not isinstance(book, Book):
+            return
+
+        if book in self.__books:
+            self.__books.remove(book)
 
     def __repr__(self):
         return f'<Author {self.full_name}, author id = {self.unique_id}>'
@@ -98,25 +111,28 @@ class Author:
 
 class Book:
 
-    def __init__(self, book_id: int, book_title: str):
+    def __init__(self, book_id: int, release_year: int, book_title: str):
         if not isinstance(book_id, int):
-            raise ValueError
+            self.__book_id = None
 
         if book_id < 0:
-            raise ValueError
+            self.__book_id = None
 
         self.__book_id = book_id
 
-        # use the attribute setter
+        # use the attribute setters
         self.title = book_title
+        self.release_year = release_year
+
+        self.__authors: List[Author] = list()
+        self.__reviews: List[Review] = list()
+        self.__genres: List[Genre] = list()
 
         self.__description = None
         self.__publisher = None
-        self.__authors = []
-        self.__release_year = None
+        self.__imgurl = None
         self.__ebook = None
         self.__num_pages = None
-
 
     @property
     def book_id(self) -> int:
@@ -189,6 +205,15 @@ class Book:
             self.__authors.remove(author)
 
     @property
+    def imgurl(self) -> str:
+        return self.__imgurl
+
+    @imgurl.setter
+    def imgurl(self, imgurl: str):
+        if isinstance(imgurl, str):
+            self.__imgurl = imgurl
+
+    @property
     def ebook(self) -> bool:
         return self.__ebook
 
@@ -205,6 +230,34 @@ class Book:
     def num_pages(self, num_pages: int):
         if isinstance(num_pages, int) and num_pages >= 0:
             self.__num_pages = num_pages
+
+    @property
+    def reviews(self) -> Iterable['Review']:
+        return iter(self.__reviews)
+
+    @property
+    def number_of_reviews(self) -> int:
+        return len(self.__reviews)
+
+    def add_review(self, review: 'Review'):
+        self.__reviews.append(review)
+
+    @property
+    def genres(self) -> Iterable['Genre']:
+        return iter(self.__genres)
+
+    @property
+    def number_of_genres(self) -> int:
+        return len(self.__genres)
+
+    def is_genred_by(self, genre: 'Genre'):
+        return genre in self.__genres
+
+    def is_genred(self) -> bool:
+        return len(self.__genres) > 0
+
+    def add_genre(self, genre: 'Genre'):
+        self.__genres.append(genre)
 
     def __repr__(self):
         return f'<Book {self.title}, book id = {self.book_id}>'
@@ -223,7 +276,7 @@ class Book:
 
 class Review:
 
-    def __init__(self, book: Book, review_text: str, rating: int):
+    def __init__(self, book: Book, review_text: str, user: 'User', rating: int):
         if isinstance(book, Book):
             self.__book = book
         else:
@@ -234,7 +287,12 @@ class Review:
         else:
             self.__review_text = "N/A"
 
-        if isinstance(rating, int) and rating >= 1 and rating <= 5:
+        if isinstance(user, User):
+            self.__user = user
+        else:
+            self.__user = None
+
+        if isinstance(rating, int) and 1 <= rating <= 5:
             self.__rating = rating
         else:
             raise ValueError
@@ -248,6 +306,10 @@ class Review:
     @property
     def review_text(self) -> str:
         return self.__review_text
+
+    @property
+    def user(self) -> int:
+        return self.__user
 
     @property
     def rating(self) -> int:
@@ -331,6 +393,35 @@ class User:
         return hash(self.user_name)
 
 
+class Genre:
+    def __init__(self, genre_name: str):
+        self.__genre_name: str = genre_name
+        self.__genre_books: List[Book] = list()
+
+    @property
+    def genre_name(self) -> str:
+        return self.__genre_name
+
+    @property
+    def genre_books(self) -> Iterable[Book]:
+        return iter(self.__genre_books)
+
+    @property
+    def number_of_genre_books(self) -> int:
+        return len(self.__genre_books)
+
+    def is_applied_to(self, book: Book) -> bool:
+        return book in self.__genre_books
+
+    def add_book(self, book: Book):
+        self.__genre_books.append(book)
+
+    def __eq__(self, other):
+        if not isinstance(other, Genre):
+            return False
+        return other.genre_name == self.genre_name
+
+
 class BooksInventory:
 
     def __init__(self):
@@ -368,3 +459,23 @@ class BooksInventory:
             if self.__books[book_id].title == book_title:
                 return self.__books[book_id]
         return None
+
+
+class ModelException(Exception):
+    pass
+
+
+def make_genre_association(book: Book, genre: Genre):
+    if genre.is_applied_to(book):
+        raise ModelException(f'Tag {genre.genre_name} already applied to Book "{book.title}"')
+
+    book.add_genre(genre)
+    genre.add_book(book)
+
+
+def make_review(review_text: str, user: User, book: Book, rating: int):
+    review = Review(book, review_text, user, rating)
+    user.add_review(review)
+    book.add_review(review)
+
+    return review

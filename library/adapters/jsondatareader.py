@@ -1,7 +1,7 @@
 import json
 from typing import List
 
-from library.domain.model import Publisher, Author, Book
+from domain.model import Publisher, Author, Book
 
 
 class BooksJSONReader:
@@ -23,17 +23,17 @@ class BooksJSONReader:
                 books_json.append(book_entry)
         return books_json
 
-    def read_authors_file(self) -> list:
-        authors_json = []
-        with open(self.__authors_file_name, encoding='UTF-8') as authors_jsonfile:
-            for line in authors_jsonfile:
-                author_entry = json.loads(line)
-                authors_json.append(author_entry)
-        return authors_json
+    # def read_authors_file(self) -> list:
+    #     authors_json = []
+    #     with open(self.__authors_file_name, encoding='UTF-8') as authors_jsonfile:
+    #         for line in authors_jsonfile:
+    #             author_entry = json.loads(line)
+    #             authors_json.append(author_entry)
+    #     return authors_json
 
 
     def read_json_files(self):
-        authors_json = self.read_authors_file()
+        # authors_json = self.read_authors_file()
         books_json = self.read_books_file()
 
         for book_json in books_json:
