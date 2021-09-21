@@ -112,10 +112,10 @@ class Author:
 class Book:
 
     def __init__(self, book_id: int, release_year: int, book_title: str):
+
         if not isinstance(book_id, int):
             self.__book_id = None
-
-        if book_id < 0:
+        elif book_id < 0:
             self.__book_id = None
 
         self.__book_id = book_id
@@ -124,10 +124,10 @@ class Book:
         self.title = book_title
         self.release_year = release_year
 
-        self.__authors: List[Author] = list()
         self.__reviews: List[Review] = list()
         self.__genres: List[Genre] = list()
 
+        self.__author = None
         self.__description = None
         self.__publisher = None
         self.__imgurl = None
@@ -149,7 +149,7 @@ class Book:
             if book_title != "":
                 self.__title = book_title
             else:
-                raise ValueError
+                self.__title = None
         else:
             raise ValueError
 
@@ -185,24 +185,13 @@ class Book:
             self.__publisher = None
 
     @property
-    def authors(self) -> List[Author]:
-        return self.__authors
+    def author(self) -> Author:
+        return self.__author
 
-    def add_author(self, author: Author):
-        if not isinstance(author, Author):
-            return
-
-        if author in self.__authors:
-            return
-
-        self.__authors.append(author)
-
-    def remove_author(self, author: Author):
-        if not isinstance(author, Author):
-            return
-
-        if author in self.__authors:
-            self.__authors.remove(author)
+    @author.setter
+    def author(self, author: Author):
+        if isinstance(author, Author):
+            self.__author = author
 
     @property
     def imgurl(self) -> str:

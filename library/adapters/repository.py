@@ -2,8 +2,7 @@ import abc
 from typing import List
 from datetime import date
 
-from library.domain.model2 import User, Article, Tag, Comment
-from library.domain.model import Publisher, Author, Book, Review, User, BooksInventory, Genre
+from library.domain.model import Author, Book, Review, User, BooksInventory, Genre
 
 
 repo_instance = None

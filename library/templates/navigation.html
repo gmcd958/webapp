@@ -12,16 +12,16 @@
 
   <div>
     <h3>
-      <a class="btn-nav" href="{{ url_for('news_bp.articles_by_date') }}">
-        Browse timeline
+      <a class="btn-nav" href="{{ url_for('book_bp.books_by_release_year') }}">
+        Browse by release_years
       </a>
     </h3>
   </div>
 
   <div>
-    <h3 id="sub-nav-header">Browse by tag</h3>
-    {% for key in tag_urls %}
-      <a class="btn-nav" href="{{ tag_urls[key] }}">{{ key }}</a>
+    <h3 id="sub-nav-header">Browse by genre</h3>
+    {% for key in genre_urls %}
+      <a class="btn-nav" href="{{ genre_urls[key] }}">{{ key }}</a>
     {% endfor %}
   </div>
 

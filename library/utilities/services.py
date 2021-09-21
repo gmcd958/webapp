@@ -2,42 +2,45 @@ from typing import Iterable
 import random
 
 from library.adapters.repository import AbstractRepository
-from library.domain.model2 import Article
+from library.domain.model import Book
 
 
-def get_tag_names(repo: AbstractRepository):
-    tags = repo.get_tags()
-    tag_names = [tag.tag_name for tag in tags]
+def get_genre_names(repo: AbstractRepository):
+    genres = repo.get_genres()
+    genre_names = [genre.genre_name for genre in genres]
 
-    return tag_names
+    return genre_names
 
 
-def get_random_articles(quantity, repo: AbstractRepository):
-    article_count = repo.get_number_of_articles()
+def get_random_books(quantity, repo: AbstractRepository):
+    book_count = repo.get_number_of_books()
 
-    if quantity >= article_count:
+    if quantity >= book_count:
         # Reduce the quantity of ids to generate if the repository has an insufficient number of articles.
-        quantity = article_count - 1
+        quantity = book_count - 1
 
     # Pick distinct and random articles.
-    random_ids = random.sample(range(1, article_count), quantity)
-    articles = repo.get_articles_by_id(random_ids)
+    random_ids = random.sample(range(1, book_count), quantity)
+    books = repo.get_books_by_id(random_ids)
 
-    return articles_to_dict(articles)
+    return books_to_dict(books)
 
 
 # ============================================
 # Functions to convert dicts to model entities
 # ============================================
 
-def article_to_dict(article: Article):
-    article_dict = {
-        'date': article.date,
-        'title': article.title,
-        'image_hyperlink': article.image_hyperlink
+def book_to_dict(book: Book):
+    book_dict = {
+        'book_id': book.book_id,
+        'release_year': book.release_year,
+        'title': book.title,
+        'author_id': book.author,
+        'description': book.description,
+        'imgurl': book.imgurl,
     }
-    return article_dict
+    return book_dict
 
 
-def articles_to_dict(articles: Iterable[Article]):
-    return [article_to_dict(article) for article in articles]
+def books_to_dict(books: Iterable[Book]):
+    return [book_to_dict(book) for book in books]

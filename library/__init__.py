@@ -35,7 +35,7 @@ def create_app(test_config=None):
         app.register_blueprint(home.home_blueprint)
 
         from .book import book
-        app.register_blueprint(book.news_blueprint)
+        app.register_blueprint(book.book_blueprint)
 
         from .authentication import authentication
         app.register_blueprint(authentication.authentication_blueprint)

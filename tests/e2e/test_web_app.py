@@ -131,7 +131,7 @@ def test_articles_with_comment(client):
 
     # Check that all comments for specified article are included on the page.
     assert b'Oh no, COVID-19 has hit New Zealand' in response.data
-    assert b'Yeah Freddie, bad news' in response.data
+    assert b'Yeah Freddie, bad book' in response.data
 
 
 def test_articles_with_tag(client):

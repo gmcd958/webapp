@@ -1,7 +1,7 @@
 import json
 from typing import List
 
-from domain.model import Publisher, Author, Book
+from library.domain.model import Publisher, Author, Book
 
 
 class BooksJSONReader:

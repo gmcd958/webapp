@@ -54,7 +54,7 @@ def test_repository_can_retrieve_article(in_memory_repo):
     # Check that the Article is commented as expected.
     comment_one = [comment for comment in article.comments if comment.comment == 'Oh no, COVID-19 has hit New Zealand'][
         0]
-    comment_two = [comment for comment in article.comments if comment.comment == 'Yeah Freddie, bad news'][0]
+    comment_two = [comment for comment in article.comments if comment.comment == 'Yeah Freddie, bad book'][0]
 
     assert comment_one.user.user_name == 'fmercury'
     assert comment_two.user.user_name == "thorke"

@@ -46,7 +46,7 @@ class MemoryRepository(AbstractRepository):
     def get_books_by_release_year(self, target_year: int) -> List[Book]:
         target_book = Book(
             book_id=None,
-            book_title=None,
+            book_title="",
             release_year=target_year
         )
         matching_books = list()
@@ -173,14 +173,15 @@ def read_csv_file(filename: str):
             row = [item.strip() for item in row]
             yield row
 
+
 def load_authors(data_path: Path, repo: MemoryRepository):
     authors = dict()
 
     authors_filename = str(Path(data_path) / "authors.csv")
     for data_row in read_csv_file(authors_filename):
         author = Author(
-            author_id=int(data_row[1]),
-            author_full_name=data_row[2]
+            author_id=int(data_row[0]),
+            author_full_name=data_row[1]
         )
         repo.add_author(author)
         authors[data_row[0]] = author
@@ -195,7 +196,7 @@ def load_books_and_genres(data_path: Path, repo: MemoryRepository, authors):
     for data_row in read_csv_file(books_filename):
 
         book_id = int(data_row[0])
-        number_of_genres = len(data_row) - 6
+        number_of_genres = len(data_row) - 7
         book_genres = data_row[-number_of_genres:]
 
         # Add any new genres; associate the current book with genres.
@@ -213,8 +214,8 @@ def load_books_and_genres(data_path: Path, repo: MemoryRepository, authors):
         )
 
         book.publisher = Publisher(data_row[3])
-        book.add_author(authors.keys(data_row[4]))
-        authors.keys(data_row[4]).add_book(book)
+        book.author = authors[data_row[4]]
+        authors[data_row[4]].add_book(book)
         book.description = data_row[5]
         book.imgurl = data_row[6]
 
@@ -246,12 +247,12 @@ def load_users(data_path: Path, repo: MemoryRepository):
 
 
 def load_reviews(data_path: Path, repo: MemoryRepository, users):
-    comments_filename = str(Path(data_path) / "comments.csv")
-    for data_row in read_csv_file(comments_filename):
+    reviews_filename = str(Path(data_path) / "reviews.csv")
+    for data_row in read_csv_file(reviews_filename):
         review = make_review(
-            review_text=data_row[3],
-            user=users[data_row[1]],
-            book=repo.get_book(int(data_row[2])),
+            review_text=data_row[2],
+            user=users[data_row[0]],
+            book=repo.get_book(int(data_row[1])),
             rating=int(data_row[3])
         )
         repo.add_review(review)
