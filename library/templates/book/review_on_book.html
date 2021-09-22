@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <header>
+        <h1>{{date}}</h1>
+    </header>
+
+    <div style="clear:both">
+        <img src={{book.imgurl}} alt="book image">
+        <h2>{{book.title}}</h2>
+        <p>{{book.description}}</p>
+        <div style="float:left">
+            {% for genre in book.genres %}
+            <button class="btn-general-disabled" disabled>{{ genre.name }}</button>
+            {% endfor %}
+        </div>
+        <div class="form-wrapper">
+            <form action="{{handler_url}}" method="post">
+                {{form.book_id}} <!-- Need to include this hidden field as it tracks the article being commented. -->
+                {{form.csrf_token}} <!-- Need to include this token - Flask WTForms requires it. -->
+                <br>
+                <div class ="form-field">{{form.review.label}} </br>{{form.review(size = 100, placeholder="type your review", class="textarea", cols="50", rows="6", wrap="hard")}}
+                    {% if form.review.errors %}
+                        <ul class="errors">
+        	            {% for error in form.review.errors %}
+        		            <li>{{error}}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class ="form-field">{{form.review_rating.label}} </br>{{form.review_rating(size = 100, placeholder="insert rating", class="textarea", cols="10", rows="3", wrap="hard")}}
+                    {% if form.review_rating.errors %}
+                        <ul class="errors">
+        	            {% for error in form.review_rating.errors %}
+        		            <li>{{error}}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                {{ form.submit }}
+            </form>
+        </div>
+        <div style="clear:both">
+            {% for review in book.reviews %}
+                <p>{{review.review_text}} (By {{review.user_name}}, Rating: {{review.rating}})</p>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

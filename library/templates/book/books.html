@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <nav style="clear:both">
+            <div style="float:left">
+                {% if first_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{first_book_url}}'">First</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>First</button>
+                {% endif %}
+                {% if prev_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{prev_book_url}}'">Previous</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Previous</button>
+                {% endif %}
+            </div>
+            <div style="float:right">
+                {% if next_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{next_book_url}}'">Next</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Next</button>
+                {% endif %}
+                {% if last_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{last_book_url}}'">Last</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Last</button>
+                {% endif %}
+            </div>
+        </nav>
+
+    {% for book in books %}
+    <book id="book">
+        <h1>{{book.title}} {{ book_year }}</h1>
+        <img src={{book.imgurl}} alt="book image">
+        <p>{{book.description}}</p>
+        <div style="float:left">
+            {% for genre in book.genres %}
+            <button class="btn-general" onclick="location.href='{{ genre_urls[genre.genre_name] }}'">{{ genre.genre_name }}</button>
+            {% endfor %}
+        </div>
+        <div style="float:right">
+            {% if book.reviews|length > 0 and book.book_id != show_reviews_for_book %}
+                <button class="btn-general" onclick="location.href='{{ book.view_review_url }}'">{{ book.reviews|length }} reviews</button>
+            {% endif %}
+            <button class="btn-general" onclick="location.href='{{ book.add_review_url }}'">Review</button>
+        </div>
+        {% if book.book_id == show_reviews_for_book %}
+        <div style="clear:both">
+            {% for review in book.reviews %}
+                <p>{{review.review_text}} (By {{review.user_name}}, Rating: {{review.rating}})</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </book>
+    {% endfor %}
+
+    <footer>
+        <nav style="clear:both">
+            <div style="float:left">
+                {% if first_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{first_book_url}}'">First</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>First</button>
+                {% endif %}
+                {% if prev_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{prev_book_url}}'">Previous</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Previous</button>
+                {% endif %}
+            </div>
+            <div style="float:right">
+                {% if next_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{next_book_url}}'">Next</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Next</button>
+                {% endif %}
+                {% if last_book_url is not none %}
+                    <button class="btn-general" onclick="location.href='{{last_book_url}}'">Last</button>
+                {% else %}
+                    <button class="btn-general-disabled" disabled>Last</button>
+                {% endif %}
+            </div>
+        </nav>
+    </footer>
+</main>
+{% endblock %}

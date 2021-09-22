@@ -3,9 +3,9 @@ from datetime import date
 import pytest
 
 from library.authentication.services import AuthenticationException
-from library.book import services as news_services
+from library.book import services as book_services
 from library.authentication import services as auth_services
-from library.book.services import NonExistentArticleException
+from library.book.services import NonExistentBookException
 
 
 def test_can_add_user(in_memory_repo):
@@ -51,150 +51,148 @@ def test_authentication_with_invalid_credentials(in_memory_repo):
         auth_services.authenticate_user(new_user_name, '0987654321', in_memory_repo)
 
 
-def test_can_add_comment(in_memory_repo):
-    article_id = 3
-    comment_text = 'The loonies are stripping the supermarkets bare!'
-    user_name = 'fmercury'
+def test_can_add_review(in_memory_repo):
+    book_id = 1
+    review_text = 'Not bad, good size'
+    user_name = 'thorke'
 
     # Call the service layer to add the comment.
-    news_services.add_comment(article_id, comment_text, user_name, in_memory_repo)
+    book_services.add_review(book_id, review_text, user_name, 5, in_memory_repo)
 
     # Retrieve the comments for the article from the repository.
-    comments_as_dict = news_services.get_comments_for_article(article_id, in_memory_repo)
+    reviews_as_dict = book_services.get_reviews_for_book(book_id, in_memory_repo)
 
     # Check that the comments include a comment with the new comment text.
     assert next(
-        (dictionary['comment_text'] for dictionary in comments_as_dict if dictionary['comment_text'] == comment_text),
+        (dictionary['review_text'] for dictionary in reviews_as_dict if dictionary['review_text'] == review_text),
         None) is not None
 
 
-def test_cannot_add_comment_for_non_existent_article(in_memory_repo):
-    article_id = 7
-    comment_text = "COVID-19 - what's that?"
+def test_cannot_add_review_for_non_existent_book(in_memory_repo):
+    book_id = 100
+    review_text = "Absolutely horrible"
     user_name = 'fmercury'
 
     # Call the service layer to attempt to add the comment.
-    with pytest.raises(news_services.NonExistentArticleException):
-        news_services.add_comment(article_id, comment_text, user_name, in_memory_repo)
+    with pytest.raises(book_services.NonExistentBookException):
+        book_services.add_review(book_id, review_text, user_name, 1, in_memory_repo)
 
 
-def test_cannot_add_comment_by_unknown_user(in_memory_repo):
-    article_id = 3
-    comment_text = 'The loonies are stripping the supermarkets bare!'
+def test_cannot_add_review_by_unknown_user(in_memory_repo):
+    book_id = 3
+    review_text = 'I am anon'
     user_name = 'gmichael'
 
     # Call the service layer to attempt to add the comment.
-    with pytest.raises(news_services.UnknownUserException):
-        news_services.add_comment(article_id, comment_text, user_name, in_memory_repo)
+    with pytest.raises(book_services.UnknownUserException):
+        book_services.add_review(book_id, review_text, user_name, 3, in_memory_repo)
 
 
-def test_can_get_article(in_memory_repo):
-    article_id = 2
+def test_can_get_book(in_memory_repo):
+    book_id = 1
 
-    article_as_dict = news_services.get_article(article_id, in_memory_repo)
+    book_as_dict = book_services.get_book(book_id, in_memory_repo)
 
-    assert article_as_dict['id'] == article_id
-    assert article_as_dict['date'] == date.fromisoformat('2020-02-29')
-    assert article_as_dict['title'] == 'Covid 19 coronavirus: US deaths double in two days, Trump says quarantine not necessary'
-    #assert article_as_dict['first_para'] == 'US President Trump tweeted on Saturday night (US time) that he has asked the Centres for Disease Control and Prevention to issue a ""strong Travel Advisory"" but that a quarantine on the New York region"" will not be necessary.'
-    assert article_as_dict['hyperlink'] == 'https://www.nzherald.co.nz/world/news/article.cfm?c_id=2&objectid=12320699'
-    assert article_as_dict['image_hyperlink'] == 'https://www.nzherald.co.nz/resizer/159Vi4ELuH2fpLrv1SCwYLulzoM=/620x349/smart/filters:quality(70)/arc-anglerfish-syd-prod-nzme.s3.amazonaws.com/public/XQOAY2IY6ZEIZNSW2E3UMG2M4U.jpg'
-    assert len(article_as_dict['comments']) == 0
+    assert book_as_dict['book_id'] == book_id
+    assert book_as_dict['release_year'] == 1987
+    assert book_as_dict['title'] == 'The House of Memory'
+    assert book_as_dict['imgurl'] == 'https://images.gr-assets.com/books/1493114742m/33394837.jpg'
+    assert book_as_dict['author_id'] == 1
+    assert book_as_dict['description'] == 'Bad book no publisher'
+    assert len(book_as_dict['reviews']) == 1
 
-    tag_names = [dictionary['name'] for dictionary in article_as_dict['tags']]
-    assert 'World' in tag_names
-    assert 'Health' in tag_names
-    assert 'Politics' in tag_names
+    genre_names = [dictionary['genre_name'] for dictionary in book_as_dict['genres']]
+    assert 'Crime' in genre_names
 
 
-def test_cannot_get_article_with_non_existent_id(in_memory_repo):
-    article_id = 7
+def test_cannot_get_book_with_non_existent_id(in_memory_repo):
+    book_id = 100
 
     # Call the service layer to attempt to retrieve the Article.
-    with pytest.raises(news_services.NonExistentArticleException):
-        news_services.get_article(article_id, in_memory_repo)
+    with pytest.raises(book_services.NonExistentBookException):
+        book_services.get_book(book_id, in_memory_repo)
 
 
-def test_get_first_article(in_memory_repo):
-    article_as_dict = news_services.get_first_article(in_memory_repo)
+def test_get_first_book(in_memory_repo):
+    book_as_dict = book_services.get_first_book(in_memory_repo)
 
-    assert article_as_dict['id'] == 1
+    assert book_as_dict['release_year'] == 1987
 
 
 def test_get_last_article(in_memory_repo):
-    article_as_dict = news_services.get_last_article(in_memory_repo)
+    book_as_dict = book_services.get_last_book(in_memory_repo)
 
-    assert article_as_dict['id'] == 6
-
-
-def test_get_articles_by_date_with_one_date(in_memory_repo):
-    target_date = date.fromisoformat('2020-02-28')
-
-    articles_as_dict, prev_date, next_date = news_services.get_articles_by_date(target_date, in_memory_repo)
-
-    assert len(articles_as_dict) == 1
-    assert articles_as_dict[0]['id'] == 1
-
-    assert prev_date is None
-    assert next_date == date.fromisoformat('2020-02-29')
+    assert book_as_dict['release_year'] == 2009
 
 
-def test_get_articles_by_date_with_multiple_dates(in_memory_repo):
-    target_date = date.fromisoformat('2020-03-01')
+def test_get_books_by_date_with_one_date(in_memory_repo):
+    target_year = 1987
 
-    articles_as_dict, prev_date, next_date = news_services.get_articles_by_date(target_date, in_memory_repo)
+    books_as_dict, prev_year, next_year = book_services.get_books_by_release_year(target_year, in_memory_repo)
+
+    assert len(books_as_dict) == 1
+    assert books_as_dict[0]['book_id'] == 1
+
+    assert prev_year is None
+    assert next_year == 2003
+
+
+def test_get_books_by_release_year_with_multiple_dates(in_memory_repo):
+    target_year = 2003
+
+    books_as_dict, prev_year, next_year = book_services.get_books_by_release_year(target_year, in_memory_repo)
 
     # Check that there are 3 articles dated 2020-03-01.
-    assert len(articles_as_dict) == 3
+    assert len(books_as_dict) == 2
 
     # Check that the article ids for the the articles returned are 3, 4 and 5.
-    article_ids = [article['id'] for article in articles_as_dict]
-    assert set([3, 4, 5]).issubset(article_ids)
+    book_ids = [book['book_id'] for book in books_as_dict]
+    assert {2, 3}.issubset(book_ids)
 
     # Check that the dates of articles surrounding the target_date are 2020-02-29 and 2020-03-05.
-    assert prev_date == date.fromisoformat('2020-02-29')
-    assert next_date == date.fromisoformat('2020-03-05')
+    assert prev_year == 1987
+    assert next_year == 2009
 
 
-def test_get_articles_by_date_with_non_existent_date(in_memory_repo):
-    target_date = date.fromisoformat('2020-03-06')
+def test_get_books_by_release_year_with_non_existent_year(in_memory_repo):
+    target_year = 1234
 
-    articles_as_dict, prev_date, next_date = news_services.get_articles_by_date(target_date, in_memory_repo)
+    books_as_dict, prev_year, next_year = book_services.get_books_by_release_year(target_year, in_memory_repo)
 
     # Check that there are no articles dated 2020-03-06.
-    assert len(articles_as_dict) == 0
+    assert len(books_as_dict) == 0
 
 
-def test_get_articles_by_id(in_memory_repo):
-    target_article_ids = [5, 6, 7, 8]
-    articles_as_dict = news_services.get_articles_by_id(target_article_ids, in_memory_repo)
+def test_get_books_by_id(in_memory_repo):
+    target_book_ids = [1, 2, 99, 100]
+    books_as_dict = book_services.get_books_by_id(target_book_ids, in_memory_repo)
 
     # Check that 2 articles were returned from the query.
-    assert len(articles_as_dict) == 2
+    assert len(books_as_dict) == 2
 
     # Check that the article ids returned were 5 and 6.
-    article_ids = [article['id'] for article in articles_as_dict]
-    assert set([5, 6]).issubset(article_ids)
+    book_ids = [book['book_id'] for book in books_as_dict]
+    assert {1, 2}.issubset(book_ids)
 
 
-def test_get_comments_for_article(in_memory_repo):
-    comments_as_dict = news_services.get_comments_for_article(1, in_memory_repo)
+def test_get_reviews_for_book(in_memory_repo):
+    reviews_as_dict = book_services.get_reviews_for_book(1, in_memory_repo)
 
     # Check that 2 comments were returned for article with id 1.
-    assert len(comments_as_dict) == 2
+    assert len(reviews_as_dict) == 1
 
     # Check that the comments relate to the article whose id is 1.
-    article_ids = [comment['article_id'] for comment in comments_as_dict]
-    article_ids = set(article_ids)
-    assert 1 in article_ids and len(article_ids) == 1
+    book_ids = [review['book_id'] for review in reviews_as_dict]
+    book_ids = set(book_ids)
+    assert 1 in book_ids and len(book_ids) == 1
 
 
-def test_get_comments_for_non_existent_article(in_memory_repo):
-    with pytest.raises(NonExistentArticleException):
-        comments_as_dict = news_services.get_comments_for_article(7, in_memory_repo)
+def test_get_reviews_for_non_existent_book(in_memory_repo):
+    with pytest.raises(NonExistentBookException):
+        reviews_as_dict = book_services.get_reviews_for_book(99, in_memory_repo)
 
 
 def test_get_comments_for_article_without_comments(in_memory_repo):
-    comments_as_dict = news_services.get_comments_for_article(2, in_memory_repo)
-    assert len(comments_as_dict) == 0
+    reviews_as_dict = book_services.get_reviews_for_book(2, in_memory_repo)
+    assert len(reviews_as_dict) == 0
 

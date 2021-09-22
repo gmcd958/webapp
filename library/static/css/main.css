@@ -31,7 +31,7 @@ img {
 
 .img-small {
     display: block;
-    width: 300px;
+    width: 50%;
     height: auto;
     padding: 5px;
     margin-left: auto;
@@ -168,22 +168,26 @@ img {
     border-bottom: 1px solid #e0e4e8;
 }
 
-#article-header {
+#editor {
+    text-align: center;
+}
+
+#book-header {
     text-align: left;
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-#article {
+#book {
     clear:both;
     margin-bottom:100px;
 }
 
-#article-footer {
+#book-footer {
     font-size: 32px;
 }
 
-#article-container {
+#book-container {
     padding: 20px;
     display: flex;
     flex-direction: column;

@@ -23,19 +23,19 @@ book_blueprint = Blueprint(
 @book_blueprint.route('/books_by_release_year', methods=['GET'])
 def books_by_release_year():
     # Read query parameters.
-    target_date = request.args.get('release_year')
+    target_year = request.args.get('release_year')
     book_to_show_reviews = request.args.get('view_reviews_for')
 
     # Fetch the first and last articles in the series.
     first_book = services.get_first_book(repo.repo_instance)
     last_book = services.get_last_book(repo.repo_instance)
 
-    if target_date is None:
+    if target_year is None:
         # No date query parameter, so return articles from day 1 of the series.
-        target_date = first_book['release_year']
+        target_year = first_book['release_year']
     else:
-        # Convert target_date from string to date.
-        target_date = date.fromisoformat(target_date)
+        # Convert target_date from string to int.
+        target_year = int(target_year)
 
     if book_to_show_reviews is None:
         # No view-comments query parameter, so set to a non-existent article id.
@@ -46,7 +46,7 @@ def books_by_release_year():
 
     # Fetch article(s) for the target date. This call also returns the previous and next dates for articles immediately
     # before and after the target date.
-    books, previous_year, next_year = services.get_books_by_release_year(target_date, repo.repo_instance)
+    books, previous_year, next_year = services.get_books_by_release_year(target_year, repo.repo_instance)
 
     first_book_url = None
     last_book_url = None
@@ -57,24 +57,24 @@ def books_by_release_year():
         # There's at least one article for the target date.
         if previous_year is not None:
             # There are articles on a previous date, so generate URLs for the 'previous' and 'first' navigation buttons.
-            prev_book_url = url_for('book_bp.books_by_release_year', date=previous_year)
-            first_book_url = url_for('book_bp.books_by_release_year', date=first_book['release_year'])
+            prev_book_url = url_for('book_bp.books_by_release_year', release_year=previous_year)
+            first_book_url = url_for('book_bp.books_by_release_year', release_year=first_book['release_year'])
 
         # There are articles on a subsequent date, so generate URLs for the 'next' and 'last' navigation buttons.
         if next_year is not None:
-            next_book_url = url_for('book_bp.books_by_release_year', date=next_year)
-            last_book_url = url_for('book_bp.books_by_release_year', date=last_book['release_year'])
+            next_book_url = url_for('book_bp.books_by_release_year', release_year=next_year)
+            last_book_url = url_for('book_bp.books_by_release_year', release_year=last_book['release_year'])
 
         # Construct urls for viewing article comments and adding comments.
         for book in books:
-            book['view_review_url'] = url_for('book_bp.books_by_release_year', date=target_date, view_reviews_for=book['book_id'])
+            book['view_review_url'] = url_for('book_bp.books_by_release_year', release_year=target_year, view_reviews_for=book['book_id'])
             book['add_review_url'] = url_for('book_bp.review_on_book', book=book['book_id'])
 
         # Generate the webpage to display the articles.
         return render_template(
-            'book/books_by_year.html',
+            'book/books.html',
             title='Books',
-            book_year=target_date,
+            book_year=target_year,
             books=books,
             selected_books=utilities.get_selected_books(len(books) * 2),
             genre_urls=utilities.get_genres_and_urls(),
@@ -82,7 +82,7 @@ def books_by_release_year():
             last_book_url=last_book_url,
             prev_book_url=prev_book_url,
             next_book_url=next_book_url,
-            show_reivews_for_book=book_to_show_reviews
+            show_reviews_for_book=book_to_show_reviews
         )
 
     # No articles to show, so return the homepage.
@@ -130,21 +130,21 @@ def books_by_genre():
 
     if cursor + books_per_page < len(book_ids):
         # There are further articles, so generate URLs for the 'next' and 'last' navigation buttons.
-        next_book_url = url_for('book_bp.books_by_genre', tag=genre_name, cursor=cursor + books_per_page)
+        next_book_url = url_for('book_bp.books_by_genre', genre=genre_name, cursor=cursor + books_per_page)
 
         last_cursor = books_per_page * int(len(book_ids) / books_per_page)
         if len(book_ids) % books_per_page == 0:
             last_cursor -= books_per_page
-        last_book_url = url_for('book_bp.books_by_genre', tag=genre_name, cursor=last_cursor)
+        last_book_url = url_for('book_bp.books_by_genre', genre=genre_name, cursor=last_cursor)
 
     # Construct urls for viewing article comments and adding comments.
     for book in books:
-        book['view_review_url'] = url_for('book_bp.books_by_genre', tag=genre_name, cursor=cursor, view_reviews_for=book['book_id'])
+        book['view_review_url'] = url_for('book_bp.books_by_genre', genre=genre_name, cursor=cursor, view_reviews_for=book['book_id'])
         book['add_review_url'] = url_for('book_bp.review_on_book', book=book['book_id'])
 
     # Generate the webpage to display the articles.
     return render_template(
-        'book/articles.html',
+        'book/books.html',
         title='Books',
         books_genres='Books categorised by ' + genre_name,
         books=books,
@@ -175,7 +175,7 @@ def review_on_book():
         book_id = int(form.book_id.data)
 
         # Use the service layer to store the new comment.
-        services.add_review(book_id, form.comment.data, user_name, repo.repo_instance)
+        services.add_review(book_id, form.review.data, user_name, int(form.review_rating.data), repo.repo_instance)
 
         # Retrieve the article in dict form.
         book = services.get_book(book_id, repo.repo_instance)
@@ -226,5 +226,8 @@ class CommentForm(FlaskForm):
         DataRequired(),
         Length(min=4, message='Your review is too short'),
         ProfanityFree(message='Your review must not contain profanity')])
+    review_rating = TextAreaField('Review_rating', [
+        DataRequired(),
+        Length(min=1, max=1, message='Your review rating has to be from 1 to 5')])
     book_id = HiddenField("Book id")
     submit = SubmitField('Submit')

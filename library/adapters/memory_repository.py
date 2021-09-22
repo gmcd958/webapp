@@ -43,21 +43,12 @@ class MemoryRepository(AbstractRepository):
 
         return book
 
-    def get_books_by_release_year(self, target_year: int) -> List[Book]:
-        target_book = Book(
-            book_id=None,
-            book_title="",
-            release_year=target_year
-        )
+    def get_books_by_release_year(self, target_year) -> List[Book]:
         matching_books = list()
-
         try:
-            index = self.book_index(target_book)
-            for book in self.__books[index:None]:
+            for book in self.__books:
                 if book.release_year == target_year:
                     matching_books.append(book)
-                else:
-                    break
         except ValueError:
             # No articles for specified date. Simply return an empty list.
             pass
@@ -149,6 +140,7 @@ class MemoryRepository(AbstractRepository):
         super().add_review(review)
         self.__reviews.append(review)
 
+
     def get_reviews(self):
         return self.__reviews
 
@@ -201,9 +193,10 @@ def load_books_and_genres(data_path: Path, repo: MemoryRepository, authors):
 
         # Add any new genres; associate the current book with genres.
         for genre in book_genres:
-            if genre not in genres.keys():
-                genres[genre] = list()
-            genres[genre].append(book_id)
+            if genre.strip() != "":
+                if genre not in genres.keys():
+                    genres[genre] = list()
+                genres[genre].append(book_id)
         del data_row[-number_of_genres:]
 
         # Create Book object.

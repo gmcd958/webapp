@@ -111,18 +111,13 @@ class Author:
 
 class Book:
 
-    def __init__(self, book_id: int, release_year: int, book_title: str):
+    def __init__(self, release_year: int, book_title: str = None, book_id: int = None):
 
-        if not isinstance(book_id, int):
-            self.__book_id = None
-        elif book_id < 0:
-            self.__book_id = None
-
-        self.__book_id = book_id
+        self.__book_id: int = book_id
+        self.__release_year: int = release_year
 
         # use the attribute setters
         self.title = book_title
-        self.release_year = release_year
 
         self.__reviews: List[Review] = list()
         self.__genres: List[Genre] = list()
@@ -151,18 +146,11 @@ class Book:
             else:
                 self.__title = None
         else:
-            raise ValueError
+            self.__title = None
 
     @property
     def release_year(self) -> int:
         return self.__release_year
-
-    @release_year.setter
-    def release_year(self, release_year: int):
-        if isinstance(release_year, int) and release_year >= 0:
-            self.__release_year = release_year
-        else:
-            raise ValueError
 
     @property
     def description(self) -> str:
@@ -257,7 +245,7 @@ class Book:
         return self.book_id == other.book_id
 
     def __lt__(self, other):
-        return self.book_id < other.book_id
+        return self.book_id < other.book_id #  & self.__release_year < other.release_year
 
     def __hash__(self):
         return hash(self.book_id)
@@ -297,7 +285,7 @@ class Review:
         return self.__review_text
 
     @property
-    def user(self) -> int:
+    def user(self) -> 'User':
         return self.__user
 
     @property
@@ -316,7 +304,7 @@ class Review:
                and other.rating == self.rating and other.timestamp == self.timestamp
 
     def __repr__(self):
-        return f'<Review of book {self.book}, rating = {self.rating}, timestamp = {self.timestamp}>'
+        return f'<Review of book {self.book}, text = {self.review_text}, rating = {self.rating}, timestamp = {self.timestamp}>'
 
 
 class User:
@@ -368,7 +356,7 @@ class User:
             self.__reviews.append(review)
 
     def __repr__(self):
-        return f'<User {self.user_name}>'
+        return f'{self.user_name}'
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -456,10 +444,10 @@ class ModelException(Exception):
 
 def make_genre_association(book: Book, genre: Genre):
     if genre.is_applied_to(book):
-        raise ModelException(f'Tag {genre.genre_name} already applied to Book "{book.title}"')
-
-    book.add_genre(genre)
-    genre.add_book(book)
+        raise ModelException(f'Genre {genre.genre_name} already applied to Book "{book.title}"')
+    else:
+        book.add_genre(genre)
+        genre.add_book(book)
 
 
 def make_review(review_text: str, user: User, book: Book, rating: int):
