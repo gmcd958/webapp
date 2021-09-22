@@ -4,6 +4,7 @@
 
 <main id="main">
     <nav style="clear:both">
+            <h1> {{ book_year }} </h1>
             <div style="float:left">
                 {% if first_book_url is not none %}
                     <button class="btn-general" onclick="location.href='{{first_book_url}}'">First</button>
@@ -29,10 +30,11 @@
                 {% endif %}
             </div>
         </nav>
-
+    <br>
+    <br>
     {% for book in books %}
     <book id="book">
-        <h1>{{book.title}} {{ book_year }}</h1>
+        <h2>{{book.title}}</h2>
         <img src={{book.imgurl}} alt="book image">
         <p>{{book.description}}</p>
         <div style="float:left">
@@ -54,6 +56,8 @@
         </div>
         {% endif %}
     </book>
+    <br>
+    <br>
     {% endfor %}
 
     <footer>

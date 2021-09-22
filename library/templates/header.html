@@ -1,3 +1,13 @@
-<header id="header">
-  Book Catalogue
-</header>
+<div class="row">
+  <div class="column left">
+    <header id="header">
+      Book Catalogue
+    </header>
+  </div>
+  <div class="column right" id="login">
+    <a class="btn-login" href="{{ url_for('authentication_bp.register') }}">Register</a>
+    <a class="btn-login" href="{{ url_for('authentication_bp.login') }}">Login</a>
+    <a class="btn-login" href="{{ url_for('authentication_bp.logout') }}">Logout</a>
+  </div>
+</div>
+

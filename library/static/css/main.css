@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Merriweather&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
 
 * {
   margin: 0;
@@ -7,7 +8,7 @@
   box-sizing: border-box;
   list-style: none;
   text-decoration: none;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Merriweather';
 }
 
 body,
@@ -22,11 +23,31 @@ h1 {
 
 img {
   display: block;
-  width: 500px;
+  width: 25%;
   height: auto;
   padding: 15px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+.left {
+  width: 100%;
+}
+
+.right {
+  width: 10%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .img-small {
@@ -40,16 +61,30 @@ img {
 
 .btn-nav {
   padding: 10px;
-  border-bottom: 1px solid #bdb8d7;
+  border-bottom: 1px solid #9AD5D5;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  color: #bdb8d7;
+  color: #9AD5D5;
   display: block;
+  font-family: 'Ubuntu';
 }
 
 .btn-nav:hover {
-  background-color: #594f8d;
-  color: #fff;
+  background-color: #C4C4C4;
+  color: #000;
+}
+
+.btn-login {
+  padding: 10px;
+  color: #000;
+  display: block;
+  text-align: center;
+  font-family: 'Ubuntu';
+}
+
+.btn-login:hover {
+  background-color: #C4C4C4;
+  color: #000;
 }
 
 .btn-general {
@@ -115,7 +150,7 @@ img {
 #nav {
   width: 200px;
   height: 100%;
-  background: #7532cd;
+  background: #004C87;
   padding: 30px 0px;
   position: fixed;
 }
@@ -135,6 +170,14 @@ img {
   padding-left: 10px;
 }
 
+#login {
+  color: #fff;
+  position: absolute;
+  right: 0px;
+  font-family: 'Ubuntu';
+  display: block;
+}
+
 #nav-footer {
   color: #fff;
   margin-top: 25px;
@@ -144,6 +187,7 @@ img {
   font-size: small;
   text-align: center;
   word-wrap: break-word;
+  font-family: 'Ubuntu';
 }
 
 #main {
@@ -159,7 +203,7 @@ img {
 }
 
 #sidebar {
-    background-color: #8acd32;
+    background-color: #797979;
     color: #717171;
     width: 33.333333%;
     min-height: 100vh;
