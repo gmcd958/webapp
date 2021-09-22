@@ -19,6 +19,7 @@ html {
 h1 {
     text-align: center;
     font-weight: bold;
+    font-size: 40px;
 }
 
 img {
@@ -88,7 +89,7 @@ img {
 }
 
 .btn-general {
-    background-color: #7532cd;
+    background-color: #004C87;
     color: white;
     border: none;
     border-radius: 8px;
@@ -96,10 +97,11 @@ img {
     padding: 10px;
     margin: 5px;
     float:left;
+    font-family: 'Ubuntu';
 }
 
 .btn-general-disabled {
-    background-color: #4b4276;
+    background-color: #C4C4C4;
     border: none;
     border-radius: 8px;
     display: inline-block;
@@ -107,10 +109,11 @@ img {
     margin: 5px;
     float:left;
     #opacity: 0.6;
+    font-family: 'Ubuntu';
 }
 
 .btn-general:hover {
-    background-color: #8acd32;
+    background-color: #C4C4C4;
     color: black;
 }
 
@@ -191,7 +194,10 @@ img {
 }
 
 #main {
-  margin: 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 20px;
+  margin-right: 20px;
   color: #717171;
   line-height: 25px;
   padding: 10px;
