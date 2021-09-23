@@ -1,8 +1,8 @@
 import pytest
 from datetime import date
 
-from library.domain.model import User, Book, Genre, make_review, make_genre_association, ModelException
-
+from library.domain.model import User, Book, Genre, make_review, make_genre_association, ModelException, Author, \
+    Publisher
 
 
 @pytest.fixture()
@@ -22,6 +22,16 @@ def user():
 @pytest.fixture()
 def genre():
     return Genre('Horror')
+
+
+@pytest.fixture()
+def author():
+    return Author(1, 'James Reiner')
+
+
+@pytest.fixture()
+def publisher():
+    return Publisher('Penguin')
 
 
 def test_user_construction(user):
@@ -61,6 +71,20 @@ def test_genre_construction(genre):
         assert False
 
     assert not genre.is_applied_to(Book(0, None, None))
+
+
+def test_author_construction(author):
+    assert author.full_name == 'James Reiner'
+
+    for book in author.books:
+        assert False
+
+
+def test_publisher_construction(publisher):
+    assert publisher.name == 'Penguin'
+
+    for book in publisher.books:
+        assert False
 
 
 def test_make_review_establishes_relationships(book, user):

@@ -65,80 +65,101 @@ def test_index(client):
     assert response.status_code == 200
 
 
-def test_login_required_to_comment(client):
+def test_login_required_to_review(client):
     response = client.post('/review')
     assert response.headers['Location'] == 'http://localhost/authentication/login'
 
 
-def test_comment(client, auth):
+def test_review(client, auth):
     # Login a user.
     auth.login()
 
-    # Check that we can retrieve the comment page.
+    # Check that we can retrieve the review page.
     response = client.get('/review?book=1')
 
     response = client.post(
         '/review',
-        data={'review': "I haven't read a fun mystery book in a while and not sure I've ever read The House of Memory. Was looking for a fun read set in France while I was on holiday there and this didn't disappoint!", 'book_id': 1}
+        data={'review': "Wowowowowow", 'review_rating': 4, 'book_id': 1}
     )
     assert response.headers['Location'] == 'http://localhost/books_by_release_year?release_year=1987&view_reviews_for=1'
 
 
-@pytest.mark.parametrize(('comment', 'messages'), (
-        ('Who thinks Trump is a f***wit?', (b'Your comment must not contain profanity')),
-        ('Hey', (b'Your comment is too short')),
-        ('ass', (b'Your comment is too short', b'Your comment must not contain profanity')),
+@pytest.mark.parametrize(('review_text', 'messages'), (
+        ('Who thinks Trump is a f***wit?', (b'Your review must not contain profanity')),
+        ('Hey', (b'Your review is too short')),
 ))
-def test_comment_with_invalid_input(client, auth, comment, messages):
+def test_review_with_invalid_input(client, auth, review_text, messages):
     # Login a user.
     auth.login()
 
-    # Attempt to comment on an article.
+    response = client.get('/review?book=1')
+
+    # Attempt to review on an book.
     response = client.post(
-        '/comment',
-        data={'comment': comment, 'article_id': 2}
+        '/review',
+        data={'review': review_text, 'review_rating': 4, 'book_id': 1}
     )
-    # Check that supplying invalid comment text generates appropriate error messages.
+    # Check that supplying invalid review text generates appropriate error messages.
     for message in messages:
         assert message in response.data
 
 
-def test_articles_without_date(client):
-    # Check that we can retrieve the articles page.
-    response = client.get('/articles_by_date')
+def test_book_without_release_year(client):
+    # Check that we can retrieve the books page.
+    response = client.get('/books_by_release_year')
     assert response.status_code == 200
 
-    # Check that without providing a date query parameter the page includes the first article.
-    assert b'Friday February 28 2020' in response.data
-    assert b'Coronavirus: First case of virus in New Zealand' in response.data
+    # Check that without providing a date query parameter the page includes the first book.
+    assert b'1987' in response.data
+    assert b'The House of Memory' in response.data
 
 
-def test_articles_with_date(client):
-    # Check that we can retrieve the articles page.
-    response = client.get('/articles_by_date?date=2020-02-29')
+def test_book_with_release_year(client):
+    # Check that we can retrieve the books page.
+    response = client.get('/books_by_release_year?release_year=2016')
+    assert response.status_code == 302
+
+    # Check that all books on the requested date are included on the page.
+    assert b'Redirecting' in response.data
+
+
+def test_books_with_review(client):
+    # Check that we can retrieve the books page.
+    response = client.get('/books_by_release_year?release_year=1987&view_reviews_for=1')
     assert response.status_code == 200
 
-    # Check that all articles on the requested date are included on the page.
-    assert b'Saturday February 29 2020' in response.data
-    assert b'Covid 19 coronavirus: US deaths double in two days, Trump says quarantine not necessary' in response.data
+    # Check that all reviews for specified book are included on the page.
+    assert b"I haven&#39;t read a fun mystery book in a while" in response.data
 
 
-def test_articles_with_comment(client):
-    # Check that we can retrieve the articles page.
-    response = client.get('/articles_by_date?date=2020-02-28&view_comments_for=1')
+def test_books_with_genre(client):
+    # Check that we can retrieve the books page.
+    response = client.get('/books_by_genre?genre=Crime')
     assert response.status_code == 200
 
-    # Check that all comments for specified article are included on the page.
-    assert b'Oh no, COVID-19 has hit New Zealand' in response.data
-    assert b'Yeah Freddie, bad book' in response.data
+    # Check that all books tagged with 'Health' are included on the page.
+    assert b'Crime' in response.data
+    assert b'Bad book no publisher' in response.data
+    assert b'The House of Memory' in response.data
 
 
-def test_articles_with_tag(client):
-    # Check that we can retrieve the articles page.
-    response = client.get('/articles_by_tag?tag=Health')
+def test_books_with_author(client):
+    # Check that we can retrieve the books page.
+    response = client.get('/books_by_author?author=James+Reiner')
     assert response.status_code == 200
 
-    # Check that all articles tagged with 'Health' are included on the page.
-    assert b'Articles tagged by Health' in response.data
-    assert b'Coronavirus: First case of virus in New Zealand' in response.data
-    assert b'Covid 19 coronavirus: US deaths double in two days, Trump says quarantine not necessary' in response.data
+    # Check that all books tagged with 'Health' are included on the page.
+    assert b'James Reiner' in response.data
+    assert b'Bad book no publisher' in response.data
+    assert b'The House of Memory' in response.data
+
+
+def test_books_with_publisher(client):
+    # Check that we can retrieve the books page.
+    response = client.get('/books_by_publisher?publisher=None')
+    assert response.status_code == 200
+
+    # Check that all books tagged with 'Health' are included on the page.
+    assert b'None' in response.data
+    assert b'Bad book no publisher' in response.data
+    assert b'The House of Memory' in response.data
