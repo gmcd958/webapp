@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <h1>Browse by publisher</h1>
+    <br>
+    {% for key in publisher_urls %}
+            <a class="btn-selection" href="{{ publisher_urls[key] }}">{{ key }}</a>
+    {% endfor %}
+</main>
+{% endblock %}

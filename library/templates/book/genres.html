@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <h1>Browse by genre</h1>
+    <br>
+    <div class="button-container">
+        {% for key in genre_urls %}
+            <a class="btn-genre" href="{{ genre_urls[key] }}">{{ key }}</a>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

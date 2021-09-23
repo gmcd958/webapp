@@ -38,6 +38,12 @@ def get_book(book_id: int, repo: AbstractRepository):
     return book_to_dict(book)
 
 
+def get_all_books(repo: AbstractRepository):
+    books = repo.get_all_books()
+
+    return books_to_dict(books)
+
+
 def get_first_book(repo: AbstractRepository):
 
     book = repo.get_first_book()
@@ -72,6 +78,18 @@ def get_books_by_release_year(release_year, repo: AbstractRepository):
 
 def get_book_ids_for_genre(genre_name, repo: AbstractRepository):
     book_ids = repo.get_book_ids_for_genre(genre_name)
+
+    return book_ids
+
+
+def get_book_ids_for_author(author_name, repo: AbstractRepository):
+    book_ids = repo.get_book_ids_for_author(author_name)
+
+    return book_ids
+
+
+def get_book_ids_for_publisher(publisher_name, repo: AbstractRepository):
+    book_ids = repo.get_book_ids_for_publisher(publisher_name)
 
     return book_ids
 

@@ -12,6 +12,20 @@ def get_genre_names(repo: AbstractRepository):
     return genre_names
 
 
+def get_author_names(repo: AbstractRepository):
+    authors = repo.get_authors()
+    author_names = [author.full_name for author in authors]
+
+    return author_names
+
+
+def get_publisher_names(repo: AbstractRepository):
+    publishers = repo.get_publishers()
+    publisher_names = [publisher.name for publisher in publishers]
+
+    return publisher_names
+
+
 def get_random_books(quantity, repo: AbstractRepository):
     book_count = repo.get_number_of_books()
 

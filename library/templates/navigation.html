@@ -19,29 +19,22 @@
   </div>
 
   <div>
-    <a class="btn-nav" href="">
+    <a class="btn-nav" href="{{ url_for('book_bp.list_of_authors') }}">
       Browse by author
     </a>
   </div>
 
   <div>
-    <a class="btn-nav" href="">
+    <a class="btn-nav" href="{{ url_for('book_bp.list_of_publishers') }}">
       Browse by publisher
     </a>
   </div>
 
   <div>
-    <a class="btn-nav" href="">
+    <a class="btn-nav" href="{{ url_for('book_bp.list_of_genres') }}">
       Browse by genre
     </a>
   </div>
-
-<!--  <div>-->
-<!--    <h3 id="sub-nav-header">Browse by genre</h3>-->
-<!--    {% for key in genre_urls %}-->
-<!--      <a class="btn-nav" href="{{ genre_urls[key] }}">{{ key }}</a>-->
-<!--    {% endfor %}-->
-<!--  </div>-->
 
   <div id="nav-footer">
     COMPSCI 235 Software Development Methodologies

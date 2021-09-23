@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <h1>Browse by author</h1>
+    <br>
+    {% for key in author_urls %}
+            <a class="btn-selection" href="{{ author_urls[key] }}">{{ key }}</a>
+    {% endfor %}
+</main>
+{% endblock %}

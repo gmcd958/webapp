@@ -2,8 +2,7 @@ import abc
 from typing import List
 from datetime import date
 
-from library.domain.model import Author, Book, Review, User, BooksInventory, Genre
-
+from library.domain.model import Author, Book, Review, User, BooksInventory, Genre, Publisher
 
 repo_instance = None
 
@@ -36,6 +35,14 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def get_book(self, book_id: int) -> Book:
+        """ Returns Book with id from the repository.
+
+        If there is no Book with the given id, this method returns None.
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_all_books(self) -> List[Book]:
         """ Returns Book with id from the repository.
 
         If there is no Book with the given id, this method returns None.
@@ -88,6 +95,22 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_book_ids_for_author(self, author_name: str):
+        """ Returns a list of ids representing Books that are tagged by genre_name.
+
+        If there are Books that are tagged by genre_name, this method returns an empty list.
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_book_ids_for_publisher(self, publisher_name: str):
+        """ Returns a list of ids representing Books that are tagged by genre_name.
+
+        If there are Books that are tagged by genre_name, this method returns an empty list.
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_release_year_of_previous_book(self, book: Book):
         """ Returns the date of an Book that immediately precedes book.
 
@@ -112,6 +135,16 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def get_genres(self) -> List[Genre]:
+        """ Returns the Genres stored in the repository. """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_authors(self) -> List[Author]:
+        """ Returns the Genres stored in the repository. """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_publishers(self) -> List[Publisher]:
         """ Returns the Genres stored in the repository. """
         raise NotImplementedError
 

@@ -7,6 +7,7 @@ class Publisher:
     def __init__(self, publisher_name: str):
         # This makes sure the setter is called here in the initializer/constructor as well.
         self.name = publisher_name
+        self.__books: List[Book] = list()
 
     @property
     def name(self) -> str:
@@ -20,6 +21,26 @@ class Publisher:
             publisher_name = publisher_name.strip()
             if publisher_name != "":
                 self.__name = publisher_name
+
+    @property
+    def books(self) -> List['Book']:
+        return self.__books
+
+    def add_book(self, book: 'Book'):
+        if not isinstance(book, Book):
+            return
+
+        if book in self.__books:
+            return
+
+        self.__books.append(book)
+
+    def remove_book(self, book: 'Book'):
+        if not isinstance(book, Book):
+            return
+
+        if book in self.__books:
+            self.__books.remove(book)
 
     def __repr__(self):
         return f'<Publisher {self.name}>'

@@ -117,10 +117,52 @@ img {
     color: black;
 }
 
+.btn-genre {
+  padding: 10px;
+  color: #000;
+  display: block;
+  text-align: center;
+  font-family: 'Ubuntu';
+}
+
+.btn-genre:hover {
+  background-color: #C4C4C4;
+  color: #000;
+}
+
+.btn-selection {
+  padding: 10px;
+  color: #000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: block;
+  text-align: left;
+  font-color: black;
+  font-family: 'Ubuntu';
+}
+
+.btn-selection:hover {
+  background-color: #C4C4C4;
+  color: #000;
+}
+
 .textarea {
     width: 100%;
     overflow: auto;
     word-break: break-all;
+}
+
+.button-container {
+    width: 100%;
+    overflow-y: auto;
+}
+
+.button-container > a {
+    width: 115px;
+    height: 115px;
+    float: left;
+    background: lightgray;
+    margin: 20px;
 }
 
 #body {
@@ -268,17 +310,18 @@ input[type='password'],
 
 input[type='submit'] {
     width: 100%;
-     background-color: #7532cd;
+     background-color: #004C87;
      color: white;
      padding: 14px 20px;
      margin: 8px 0;
      border: none;
      border-radius: 4px;
      cursor: pointer;
+     font-family: 'Ubuntu';
 }
 
 input[type='submit']:hover {
-    background-color: #8acd32;
+    background-color: #C4C4C4;
     color: black;
 }
 

@@ -8,14 +8,17 @@
     </header>
 
     <div style="clear:both">
+        <h1>{{book.title}}</h1>
+        <br>
         <img src={{book.imgurl}} alt="book image">
-        <h2>{{book.title}}</h2>
+        <br>
         <p>{{book.description}}</p>
         <div style="float:left">
             {% for genre in book.genres %}
-            <button class="btn-general-disabled" disabled>{{ genre.name }}</button>
+            <button class="btn-general-disabled" disabled>{{ genre.genre_name }}</button>
             {% endfor %}
         </div>
+        <br>
         <div class="form-wrapper">
             <form action="{{handler_url}}" method="post">
                 {{form.book_id}} <!-- Need to include this hidden field as it tracks the article being commented. -->
@@ -30,7 +33,7 @@
                         </ul>
                     {% endif %}
                 </div>
-                <div class ="form-field">{{form.review_rating.label}} </br>{{form.review_rating(size = 100, placeholder="insert rating", class="textarea", cols="10", rows="3", wrap="hard")}}
+                <div class ="form-field">Rating </br>{{form.review_rating(size = 100, placeholder="insert rating", class="textarea", cols="10", rows="3", wrap="hard")}}
                     {% if form.review_rating.errors %}
                         <ul class="errors">
         	            {% for error in form.review_rating.errors %}

@@ -63,11 +63,10 @@ def test_index(client):
     # Check that we can retrieve the home page.
     response = client.get('/')
     assert response.status_code == 200
-    assert b'The COVID Pandemic of 2020' in response.data
 
 
 def test_login_required_to_comment(client):
-    response = client.post('/comment')
+    response = client.post('/review')
     assert response.headers['Location'] == 'http://localhost/authentication/login'
 
 
@@ -76,13 +75,13 @@ def test_comment(client, auth):
     auth.login()
 
     # Check that we can retrieve the comment page.
-    response = client.get('/comment?article=2')
+    response = client.get('/review?book=1')
 
     response = client.post(
-        '/comment',
-        data={'comment': 'Who needs quarantine?', 'article_id': 2}
+        '/review',
+        data={'review': "I haven't read a fun mystery book in a while and not sure I've ever read The House of Memory. Was looking for a fun read set in France while I was on holiday there and this didn't disappoint!", 'book_id': 1}
     )
-    assert response.headers['Location'] == 'http://localhost/articles_by_date?date=2020-02-29&view_comments_for=2'
+    assert response.headers['Location'] == 'http://localhost/books_by_release_year?release_year=1987&view_reviews_for=1'
 
 
 @pytest.mark.parametrize(('comment', 'messages'), (

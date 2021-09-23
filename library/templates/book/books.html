@@ -3,8 +3,8 @@
 {% block content %}
 
 <main id="main">
+    <h1> {{ title }} </h1>
     <nav style="clear:both">
-            <h1> {{ book_year }} </h1>
             <div style="float:left">
                 {% if first_book_url is not none %}
                     <button class="btn-general" onclick="location.href='{{first_book_url}}'">First</button>
@@ -36,7 +36,8 @@
     <book id="book">
         <h2>{{book.title}}</h2>
         <img src={{book.imgurl}} alt="book image">
-        <p>{{book.description}}</p>
+
+        <p><strong>Description: </strong>{{book.description}}</p>
         <div style="float:left">
             {% for genre in book.genres %}
             <button class="btn-general" onclick="location.href='{{ genre_urls[genre.genre_name] }}'">{{ genre.genre_name }}</button>

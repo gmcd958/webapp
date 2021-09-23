@@ -19,6 +19,7 @@ class MemoryRepository(AbstractRepository):
         self.__books = list()
         self.__books_index = dict()
         self.__authors = list()
+        self.__publishers = list()
         self.__genres = list()
         self.__users = list()
         self.__reviews = list()
@@ -42,6 +43,9 @@ class MemoryRepository(AbstractRepository):
             pass  # Ignore exception and return None.
 
         return book
+
+    def get_all_books(self) -> List[Book]:
+        return self.__books
 
     def get_books_by_release_year(self, target_year) -> List[Book]:
         matching_books = list()
@@ -93,6 +97,32 @@ class MemoryRepository(AbstractRepository):
 
         return book_ids
 
+    def get_book_ids_for_author(self, author_name: str):
+        # Linear search, to find the first occurrence of a Genre with the name genre_name.
+        author = next((author for author in self.__authors if author.full_name == author_name), None)
+
+        # Retrieve the ids of articles associated with the Genre.
+        if author is not None:
+            book_ids = [book.book_id for book in author.books]
+        else:
+            # No genre with name genre_name, so return an empty list.
+            book_ids = list()
+
+        return book_ids
+
+    def get_book_ids_for_publisher(self, publisher_name: str):
+        # Linear search, to find the first occurrence of a Genre with the name genre_name.
+        publisher = next((publisher for publisher in self.__publishers if publisher.name == publisher_name), None)
+
+        # Retrieve the ids of articles associated with the Genre.
+        if publisher is not None:
+            book_ids = [book.book_id for book in publisher.books]
+        else:
+            # No genre with name genre_name, so return an empty list.
+            book_ids = list()
+
+        return book_ids
+
     def get_release_year_of_previous_book(self, book: Book):
         previous_release_year = None
 
@@ -129,6 +159,12 @@ class MemoryRepository(AbstractRepository):
     def get_authors(self) -> List[Author]:
         return self.__authors
 
+    def add_publisher(self, publisher: Publisher):
+        self.__publishers.append(publisher)
+
+    def get_publishers(self) -> List[Publisher]:
+        return self.__publishers
+
     def add_genre(self, genre: Genre):
         self.__genres.append(genre)
 
@@ -139,7 +175,6 @@ class MemoryRepository(AbstractRepository):
         # call parent class first, add_review relies on implementation of code common to all derived classes
         super().add_review(review)
         self.__reviews.append(review)
-
 
     def get_reviews(self):
         return self.__reviews
@@ -182,6 +217,7 @@ def load_authors(data_path: Path, repo: MemoryRepository):
 
 def load_books_and_genres(data_path: Path, repo: MemoryRepository, authors):
     genres = dict()
+    publishers = dict()
 
     books_filename = str(data_path / "books.csv")
 
@@ -206,9 +242,14 @@ def load_books_and_genres(data_path: Path, repo: MemoryRepository, authors):
             book_title=data_row[2],
         )
 
-        book.publisher = Publisher(data_row[3])
+        publisher = Publisher(data_row[3])
+        repo.add_publisher(publisher)
+        publishers[publisher.name] = publisher
+        publishers[publisher.name].add_book(book)
+
         book.author = authors[data_row[4]]
         authors[data_row[4]].add_book(book)
+
         book.description = data_row[5]
         book.imgurl = data_row[6]
 
