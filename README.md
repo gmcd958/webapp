@@ -9,7 +9,7 @@ A Web application that demonstrates use of Python's Flask framework. The applica
 **Installation via requirements.txt**
 
 ```shell
-$ cd 2021CompSci235-03-CovidWebApp
+$ cd compsci235-assignment2-cs235-a2-gmcd958
 $ py -3 -m venv venv
 $ venv\Scripts\activate
 $ pip install -r requirements.txt
