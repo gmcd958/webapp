@@ -38,6 +38,11 @@ The *compsci235-assignment2-cs235-a2-gmcd958/.env* file contains variable settin
 * `TESTING`: Set to False for running the application. Overridden and set to True automatically when testing the application.
 * `WTF_CSRF_SECRET_KEY`: Secret key used by the WTForm library.
 
+These settings are for the database version of the code:
+
+* `SQLALCHEMY_DATABASE_URI`: The URI of the SQlite database, by default it will be created in the root directory of the project.
+* `SQLALCHEMY_ECHO`: If this flag is set to True, SQLAlchemy will print the SQL statements it uses internally to interact with the tables. 
+* `REPOSITORY`: This flag allows us to easily switch between using the Memory repository or the SQLAlchemyDatabase repository.
 
 ## Testing
 
@@ -45,4 +50,4 @@ After you have configured pytest as the testing tool for PyCharm (File - Setting
 
 Alternatively, from a terminal in the root folder of the project, you can also call 'python -m pytest tests' to run all the tests. PyCharm also provides a built-in terminal, which uses the configured virtual environment. 
 
- 
+To run the tests for the database components, these are in the folder 'tests_db', so you can call 'python -m pytest tests_db' to run them from the command line.
