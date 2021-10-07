@@ -28,6 +28,8 @@ def get_publisher_names(repo: AbstractRepository):
 
 def get_random_books(quantity, repo: AbstractRepository):
     book_count = repo.get_number_of_books()
+    print("-----------------------------")
+    print(book_count)
 
     if quantity >= book_count:
         # Reduce the quantity of ids to generate if the repository has an insufficient number of articles.

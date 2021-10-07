@@ -3,7 +3,6 @@ from typing import List, Iterable
 
 
 class Publisher:
-
     def __init__(self, publisher_name: str):
         # This makes sure the setter is called here in the initializer/constructor as well.
         self.name = publisher_name
@@ -58,7 +57,6 @@ class Publisher:
 
 
 class Author:
-
     def __init__(self, author_id: int, author_full_name: str):
         if not isinstance(author_id, int):
             raise ValueError
@@ -421,7 +419,6 @@ class Genre:
 
 
 class BooksInventory:
-
     def __init__(self):
         self.__books = {}
         self.__prices = {}

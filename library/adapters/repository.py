@@ -1,6 +1,5 @@
 import abc
 from typing import List
-from datetime import date
 
 from library.domain.model import Author, Book, Review, User, BooksInventory, Genre, Publisher
 
@@ -130,17 +129,20 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def add_genre(self, genre: Genre):
-        """ Adds a Genre to the repository. """
         raise NotImplementedError
 
     @abc.abstractmethod
     def get_genres(self) -> List[Genre]:
-        """ Returns the Genres stored in the repository. """
+        raise NotImplementedError
+
+    def add_author(self, author: Author):
         raise NotImplementedError
 
     @abc.abstractmethod
     def get_authors(self) -> List[Author]:
-        """ Returns the Genres stored in the repository. """
+        raise NotImplementedError
+
+    def add_publisher(self, publisher):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -150,11 +152,7 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def add_review(self, review: Review):
-        """ Adds a Comment to the repository.
-
-        If the Comment doesn't have bidirectional links with an Article and a User, this method raises a
-        RepositoryException and doesn't update the repository.
-        """
+        """ Adds a Reviews to the repository. """
         if review.user is None or review not in review.user.reviews:
             raise RepositoryException('Review not correctly attached to a User')
         if review.book is None or review not in review.book.reviews:
@@ -164,6 +162,9 @@ class AbstractRepository(abc.ABC):
     def get_reviews(self):
         """ Returns the Reviews stored in the repository. """
         raise NotImplementedError
+
+
+
 
 
 
