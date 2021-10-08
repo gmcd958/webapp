@@ -91,7 +91,7 @@ def map_model_to_tables():
         '_Book__imgurl': books_table.c.imgurl,
         '_Book__ebook': books_table.c.ebook,
         '_Book__num_pages': books_table.c.num_pages,
-        '_Book__review': relationship(model.Review, backref='_Review__book'),
+        '_Book__reviews': relationship(model.Review, backref='_Review__book'),
         '_Book__genres': relationship(model.Genre, secondary=book_genres_table, back_populates='_Genre__genre_books')
     })
     mapper(model.Genre, genres_table, properties={

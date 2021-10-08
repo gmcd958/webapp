@@ -30,7 +30,7 @@ def load_authors(data_path: Path, repo: AbstractRepository):
             author_id=int(data_row[0]),
             author_full_name=data_row[1]
         )
-        repo.add_author(author)
+        #repo.add_author(author)
         authors[data_row[0]] = author
     return authors
 
