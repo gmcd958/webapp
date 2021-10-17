@@ -30,14 +30,27 @@ def load_authors(data_path: Path, repo: AbstractRepository):
             author_id=int(data_row[0]),
             author_full_name=data_row[1]
         )
-        #repo.add_author(author)
+        repo.add_author(author)
         authors[data_row[0]] = author
     return authors
 
 
-def load_books_and_genres(data_path: Path, repo: AbstractRepository, authors, database_mode: bool):
-    genres = dict()
+def load_publishers(data_path: Path, repo: AbstractRepository):
     publishers = dict()
+
+    publishers_filename = str(Path(data_path) / "publishers.csv")
+    for data_row in read_csv_file(publishers_filename):
+        publisher = Publisher(
+            publisher_id=int(data_row[0]),
+            publisher_name=data_row[1]
+        )
+        repo.add_publisher(publisher)
+        publishers[data_row[0]] = publisher
+    return publishers
+
+
+def load_books_and_genres(data_path: Path, repo: AbstractRepository, authors, publishers, database_mode: bool):
+    genres = dict()
 
     books_filename = str(data_path / "books.csv")
 
@@ -62,13 +75,13 @@ def load_books_and_genres(data_path: Path, repo: AbstractRepository, authors, da
             book_title=data_row[2],
         )
 
-        publisher = Publisher(data_row[3])
-        repo.add_publisher(publisher)
-        publishers[publisher.name] = publisher
-        publishers[publisher.name].add_book(book)
+        book.publisher = data_row[3]
+        #book.publisher = publishers[data_row[3]]
+        #publishers[data_row[3]].add_book(book)
 
-        book.author = authors[data_row[4]]
-        authors[data_row[4]].add_book(book)
+        book.author = data_row[4]
+        #book.author = authors[data_row[4]]
+        #authors[data_row[4]].add_book(book)
 
         book.description = data_row[5]
         book.imgurl = data_row[6]

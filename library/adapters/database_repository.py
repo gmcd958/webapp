@@ -139,7 +139,7 @@ class SqlAlchemyRepository(AbstractRepository):
         book_ids = []
 
         # Use native SQL to retrieve article ids, since there is no mapped class for the article_tags table.
-        row = self._session_cm.session.execute('SELECT id FROM authors WHERE author_name = :author_name', {'author_name': author_name}).fetchone()
+        row = self._session_cm.session.execute('SELECT id FROM authors WHERE authors.full_name = :authors.full_name', {'authors.full_name': author_name}).fetchone()
 
         if row is None:
             # No tag with the name tag_name - create an empty list.
@@ -148,8 +148,8 @@ class SqlAlchemyRepository(AbstractRepository):
             author_id = row[0]
             # Retrieve article ids of articles associated with the tag.
             book_ids = self._session_cm.session.execute(
-                    'SELECT book_id FROM authors WHERE author_id = :author_id ORDER BY author_id ASC',
-                    {'author_id': author_id}
+                    'SELECT books.id FROM authors WHERE author.id = :author.id ORDER BY author.id ASC',
+                    {'author.id': author_id}
             ).fetchall()
             book_ids = [id[0] for id in book_ids]
 
@@ -159,7 +159,7 @@ class SqlAlchemyRepository(AbstractRepository):
         book_ids = []
 
         # Use native SQL to retrieve article ids, since there is no mapped class for the article_tags table.
-        row = self._session_cm.session.execute('SELECT id FROM publishers WHERE publisher_name = :publisher_name', {'publisher_name': publisher_name}).fetchone()
+        row = self._session_cm.session.execute('SELECT id FROM publishers WHERE publishers.name = :publishers.name', {'publishers.name': publisher_name}).fetchone()
 
         if row is None:
             # No tag with the name tag_name - create an empty list.
@@ -168,7 +168,7 @@ class SqlAlchemyRepository(AbstractRepository):
             publisher_id = row[0]
             # Retrieve article ids of articles associated with the tag.
             book_ids = self._session_cm.session.execute(
-                    'SELECT book_id FROM publishers WHERE publisher_id = :publisher_id ORDER BY publisher_id ASC',
+                    'SELECT books.id FROM publishers WHERE publisher_id = :publisher_id ORDER BY publisher_id ASC',
                     {'publisher_id': publisher_id}
             ).fetchall()
             book_ids = [id[0] for id in book_ids]
@@ -199,7 +199,7 @@ class SqlAlchemyRepository(AbstractRepository):
             scm.commit()
 
     def get_authors(self) -> List[Author]:
-        authors = self._session_cm.session.query(Genre).all()
+        authors = self._session_cm.session.query(Author).all()
         return authors
 
     def add_publisher(self, publisher: Publisher):

@@ -121,7 +121,7 @@ def book_to_dict(book: Book):
         'book_id': book.book_id,
         'release_year': book.release_year,
         'title': book.title,
-        'author_id': book.author.unique_id,
+        'author_id': book.author,
         'description': book.description,
         'imgurl': book.imgurl,
         'reviews': reviews_to_dict(book.reviews),

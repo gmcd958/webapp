@@ -28,7 +28,7 @@ def test_repository_can_retrieve_book_count(in_memory_repo):
     number_of_books = in_memory_repo.get_number_of_books()
 
     # Check that the query returned 6 Books.
-    assert number_of_books == 4
+    assert number_of_books == 20
 
 
 def test_repository_can_add_book(in_memory_repo):
@@ -77,7 +77,7 @@ def test_repository_does_not_retrieve_an_book_when_there_are_no_books_for_a_give
 def test_repository_can_retrieve_genres(in_memory_repo):
     genres: List[Genre] = in_memory_repo.get_genres()
 
-    assert len(genres) == 3
+    assert len(genres) == 14
 
     genre_one = [genre for genre in genres if genre.genre_name == 'Mystery'][0]
     genre_two = [genre for genre in genres if genre.genre_name == 'Crime'][0]
@@ -91,7 +91,7 @@ def test_repository_can_retrieve_genres(in_memory_repo):
 def test_repository_can_retrieve_authors(in_memory_repo):
     authors: List[Author] = in_memory_repo.get_authors()
 
-    assert len(authors) == 1
+    assert len(authors) == 8
 
     author = [author for author in authors if author.full_name == 'James Reiner'][0]
 
@@ -101,7 +101,7 @@ def test_repository_can_retrieve_authors(in_memory_repo):
 def test_repository_can_retrieve_publishers(in_memory_repo):
     publishers: List[Publisher] = in_memory_repo.get_publishers()
 
-    assert len(publishers) == 4
+    assert len(publishers) == 8
 
     publisher1 = [publisher for publisher in publishers if publisher.name == 'None'][0]
     publisher2 = [publisher for publisher in publishers if publisher.name == 'Penguin'][0]
@@ -121,7 +121,7 @@ def test_repository_can_get_first_book(in_memory_repo):
 
 def test_repository_can_get_last_book(in_memory_repo):
     book = in_memory_repo.get_last_book()
-    assert book.title == 'Crowner Royal'
+    assert book.title == 'Send Lawyers, Guns, and Roses'
 
 
 def test_repository_can_get_books_by_ids(in_memory_repo):
@@ -129,7 +129,7 @@ def test_repository_can_get_books_by_ids(in_memory_repo):
 
     assert len(books) == 3
     assert books[0].title == 'The House of Memory'
-    assert books[1].title == "Toxin"
+    assert books[1].title == 'Fear the Darkness'
     assert books[2].title == 'A Murder is Announced'
 
 
@@ -141,7 +141,7 @@ def test_repository_does_not_retrieve_book_for_non_existent_id(in_memory_repo):
 
 
 def test_repository_returns_an_empty_list_for_non_existent_ids(in_memory_repo):
-    books = in_memory_repo.get_books_by_id([0, 9])
+    books = in_memory_repo.get_books_by_id([0, 99])
 
     assert len(books) == 0
 
@@ -149,7 +149,7 @@ def test_repository_returns_an_empty_list_for_non_existent_ids(in_memory_repo):
 def test_repository_returns_book_ids_for_existing_genre(in_memory_repo):
     book_ids = in_memory_repo.get_book_ids_for_genre('Crime')
 
-    assert book_ids == [1, 3, 4]
+    assert book_ids == [1, 4, 6, 8, 11, 13, 16, 18, 20]
 
 
 def test_repository_returns_an_empty_list_for_non_existent_genre(in_memory_repo):

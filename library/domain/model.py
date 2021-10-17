@@ -3,10 +3,23 @@ from typing import List, Iterable
 
 
 class Publisher:
-    def __init__(self, publisher_name: str):
+    def __init__(self, publisher_id: int, publisher_name: str):
         # This makes sure the setter is called here in the initializer/constructor as well.
+        if not isinstance(publisher_id, int):
+            raise ValueError
+
+        if publisher_id < 0:
+            raise ValueError
+
+        self.__publisher_id = publisher_id
+
         self.name = publisher_name
         self.__books: List[Book] = list()
+
+
+    @property
+    def publisher_id(self) -> int:
+        return self.__publisher_id
 
     @property
     def name(self) -> str:
@@ -129,7 +142,6 @@ class Author:
 
 
 class Book:
-
     def __init__(self, release_year: int, book_title: str = None, book_id: int = None):
 
         self.__book_id: int = book_id
@@ -181,24 +193,20 @@ class Book:
             self.__description = description.strip()
 
     @property
-    def publisher(self) -> Publisher:
+    def publisher(self) -> int:
         return self.__publisher
 
     @publisher.setter
-    def publisher(self, publisher: Publisher):
-        if isinstance(publisher, Publisher):
-            self.__publisher = publisher
-        else:
-            self.__publisher = None
+    def publisher(self, publisher: int):
+        self.__publisher = publisher
 
     @property
-    def author(self) -> Author:
+    def author(self) -> int:
         return self.__author
 
     @author.setter
-    def author(self, author: Author):
-        if isinstance(author, Author):
-            self.__author = author
+    def author(self, author: int):
+        self.__author = author
 
     @property
     def imgurl(self) -> str:

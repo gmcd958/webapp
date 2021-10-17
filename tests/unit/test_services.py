@@ -122,7 +122,7 @@ def test_get_first_book(in_memory_repo):
 def test_get_last_book(in_memory_repo):
     book_as_dict = book_services.get_last_book(in_memory_repo)
 
-    assert book_as_dict['release_year'] == 2009
+    assert book_as_dict['release_year'] == 2016
 
 
 def test_get_books_by_date_with_one_date(in_memory_repo):
@@ -130,11 +130,11 @@ def test_get_books_by_date_with_one_date(in_memory_repo):
 
     books_as_dict, prev_year, next_year = book_services.get_books_by_release_year(target_year, in_memory_repo)
 
-    assert len(books_as_dict) == 1
+    assert len(books_as_dict) == 2
     assert books_as_dict[0]['book_id'] == 1
 
     assert prev_year is None
-    assert next_year == 2003
+    assert next_year == 1988
 
 
 def test_get_books_by_release_year_with_multiple_dates(in_memory_repo):
@@ -142,16 +142,15 @@ def test_get_books_by_release_year_with_multiple_dates(in_memory_repo):
 
     books_as_dict, prev_year, next_year = book_services.get_books_by_release_year(target_year, in_memory_repo)
 
-    # Check that there are 3 books dated 2020-03-01.
     assert len(books_as_dict) == 2
 
     # Check that the book ids for the the books returned are 3, 4 and 5.
     book_ids = [book['book_id'] for book in books_as_dict]
-    assert {2, 3}.issubset(book_ids)
+    assert {7, 8}.issubset(book_ids)
 
     # Check that the dates of books surrounding the target_date are 2020-02-29 and 2020-03-05.
-    assert prev_year == 1987
-    assert next_year == 2009
+    assert prev_year == 1996
+    assert next_year == 2008
 
 
 def test_get_books_by_release_year_with_non_existent_year(in_memory_repo):
@@ -193,6 +192,6 @@ def test_get_reviews_for_non_existent_book(in_memory_repo):
 
 
 def test_get_reviews_for_book_without_reviews(in_memory_repo):
-    reviews_as_dict = book_services.get_reviews_for_book(2, in_memory_repo)
+    reviews_as_dict = book_services.get_reviews_for_book(7, in_memory_repo)
     assert len(reviews_as_dict) == 0
 

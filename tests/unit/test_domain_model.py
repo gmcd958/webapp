@@ -31,7 +31,7 @@ def author():
 
 @pytest.fixture()
 def publisher():
-    return Publisher('Penguin')
+    return Publisher(1, 'Penguin')
 
 
 def test_user_construction(user):
