@@ -82,10 +82,10 @@ def map_model_to_tables():
         '_Book__title': books_table.c.title,
         '_Book__release_year': books_table.c.release_year,
         '_Book__description': books_table.c.description,
-        '_Book__author':  books_table.c.author,
+        #'_Book__author':  books_table.c.author,
         #'_Book__author':  relationship(model.Author, back_populates='_Author__books'),
-        '_Book__publisher': books_table.c.publisher,
-        #'_Book__publisher': relationship(model.Publisher, back_populates='_Publisher__books'),
+        #'_Book__publisher': books_table.c.publisher,
+        #'_Book__publisher': relationship(model.Publisher), #, back_populates='_Publisher__books'),
         '_Book__imgurl': books_table.c.imgurl,
         '_Book__ebook': books_table.c.ebook,
         '_Book__num_pages': books_table.c.num_pages,
@@ -95,12 +95,12 @@ def map_model_to_tables():
     mapper(model.Publisher, publishers_table, properties={
         '_Publisher__publisher_id': publishers_table.c.id,
         '_Publisher__name': publishers_table.c.name,
-        #'_Publisher__books': relationship(model.Book)
+        '_Publisher__books': relationship(model.Book, backref='_Book__publisher')
     })
     mapper(model.Author, authors_table, properties={
         '_Author__unique_id': authors_table.c.id,
         '_Author__full_name': authors_table.c.full_name,
-        #'_Author__books': relationship(model.Book)
+        '_Author__books': relationship(model.Book, backref='_Book__author')
     })
     mapper(model.Genre, genres_table, properties={
         '_Genre__genre_name': genres_table.c.genre_name,

@@ -97,7 +97,7 @@ def test_can_get_book(in_memory_repo):
     assert book_as_dict['release_year'] == 1987
     assert book_as_dict['title'] == 'The House of Memory'
     assert book_as_dict['imgurl'] == 'https://images.gr-assets.com/books/1493114742m/33394837.jpg'
-    assert book_as_dict['author_id'] == 1
+    assert book_as_dict['author_id'] == '1'
     assert book_as_dict['description'] == 'Bad book no publisher'
     assert len(book_as_dict['reviews']) == 1
 
@@ -192,6 +192,6 @@ def test_get_reviews_for_non_existent_book(in_memory_repo):
 
 
 def test_get_reviews_for_book_without_reviews(in_memory_repo):
-    reviews_as_dict = book_services.get_reviews_for_book(7, in_memory_repo)
+    reviews_as_dict = book_services.get_reviews_for_book(20, in_memory_repo)
     assert len(reviews_as_dict) == 0
 

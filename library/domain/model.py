@@ -192,37 +192,37 @@ class Book:
         if isinstance(description, str):
             self.__description = description.strip()
 
-    @property
-    def publisher(self) -> int:
-        return self.__publisher
-
     # @property
-    # def publisher(self) -> Publisher:
+    # def publisher(self) -> int:
     #     return self.__publisher
 
-    @publisher.setter
-    def publisher(self, publisher: int):
-        self.__publisher = publisher
+    @property
+    def publisher(self) -> Publisher:
+        return self.__publisher
 
     # @publisher.setter
-    # def publisher(self, publisher: Publisher):
+    # def publisher(self, publisher: int):
     #     self.__publisher = publisher
 
-    @property
-    def author(self) -> int:
-        return self.__author
+    @publisher.setter
+    def publisher(self, publisher: Publisher):
+        self.__publisher = publisher
 
     # @property
-    # def author(self) -> Author:
+    # def author(self) -> int:
     #     return self.__author
 
-    @author.setter
-    def author(self, author: int):
-        self.__author = author
+    @property
+    def author(self) -> Author:
+        return self.__author
 
     # @author.setter
-    # def author(self, author: Author):
+    # def author(self, author: int):
     #     self.__author = author
+
+    @author.setter
+    def author(self, author: Author):
+        self.__author = author
 
     @property
     def imgurl(self) -> str:

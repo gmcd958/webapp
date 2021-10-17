@@ -49,7 +49,7 @@ def test_repository_can_retrieve_book(in_memory_repo):
     assert book.title == 'The House of Memory'
 
     # Check that the Book is reviewed as expected.
-    review_one = [review for review in book.reviews if review.review_text == "I haven't read a fun mystery book in a while and not sure I've ever read Crowner Royal. Was looking for a fun read set in France while I was on holiday there and this didn't disappoint!"][0]
+    review_one = [review for review in book.reviews if review.review_text == "I haven't read a fun mystery book in a while and not sure I've ever read The House of Memory. Was looking for a fun read set in France while I was on holiday there and this didn't disappoint!"][0]
 
     assert review_one.user.user_name == 'thorke'
 
@@ -83,9 +83,9 @@ def test_repository_can_retrieve_genres(in_memory_repo):
     genre_two = [genre for genre in genres if genre.genre_name == 'Crime'][0]
     genre_three = [genre for genre in genres if genre.genre_name == 'Thriller'][0]
 
-    assert genre_one.number_of_genre_books == 2
-    assert genre_two.number_of_genre_books == 3
-    assert genre_three.number_of_genre_books == 2
+    assert genre_one.number_of_genre_books == 8
+    assert genre_two.number_of_genre_books == 9
+    assert genre_three.number_of_genre_books == 11
 
 
 def test_repository_can_retrieve_authors(in_memory_repo):
@@ -103,15 +103,13 @@ def test_repository_can_retrieve_publishers(in_memory_repo):
 
     assert len(publishers) == 8
 
-    publisher1 = [publisher for publisher in publishers if publisher.name == 'None'][0]
-    publisher2 = [publisher for publisher in publishers if publisher.name == 'Penguin'][0]
-    publisher3 = [publisher for publisher in publishers if publisher.name == 'Harper'][0]
-    publisher4 = [publisher for publisher in publishers if publisher.name == 'Simon & Schuster UK'][0]
+    publisher1 = [publisher for publisher in publishers if publisher.name == 'Penguin'][0]
+    publisher2 = [publisher for publisher in publishers if publisher.name == 'Harper'][0]
+    publisher3 = [publisher for publisher in publishers if publisher.name == 'Simon & Schuster UK'][0]
 
     assert len(publisher1.books) == 1
     assert len(publisher2.books) == 1
     assert len(publisher3.books) == 1
-    assert len(publisher4.books) == 1
 
 
 def test_repository_can_get_first_book(in_memory_repo):
@@ -130,7 +128,7 @@ def test_repository_can_get_books_by_ids(in_memory_repo):
     assert len(books) == 3
     assert books[0].title == 'The House of Memory'
     assert books[1].title == 'Fear the Darkness'
-    assert books[2].title == 'A Murder is Announced'
+    assert books[2].title == 'Zombie Bay'
 
 
 def test_repository_does_not_retrieve_book_for_non_existent_id(in_memory_repo):
@@ -201,11 +199,11 @@ def test_repository_returns_date_of_next_book(in_memory_repo):
     book = in_memory_repo.get_book(2)
     next_date = in_memory_repo.get_release_year_of_next_book(book)
 
-    assert next_date == 2009
+    assert next_date == 1988
 
 
 def test_repository_returns_none_when_there_are_no_subsequent_books(in_memory_repo):
-    book = in_memory_repo.get_book(4)
+    book = in_memory_repo.get_book(20)
     next_date = in_memory_repo.get_release_year_of_next_book(book)
 
     assert next_date is None
@@ -226,7 +224,7 @@ def test_repository_can_add_an_author(in_memory_repo):
 
 
 def test_repository_can_add_a_publisher(in_memory_repo):
-    publisher = Publisher('Oxford')
+    publisher = Publisher(9, 'Oxford')
     in_memory_repo.add_publisher(publisher)
 
     assert publisher in in_memory_repo.get_publishers()
@@ -264,7 +262,7 @@ def test_repository_does_not_add_a_review_without_an_book_properly_attached(in_m
 
 
 def test_repository_can_retrieve_reviews(in_memory_repo):
-    assert len(in_memory_repo.get_reviews()) == 1
+    assert len(in_memory_repo.get_reviews()) == 9
 
 
 

@@ -75,13 +75,13 @@ def load_books_and_genres(data_path: Path, repo: AbstractRepository, authors, pu
             book_title=data_row[2],
         )
 
-        book.publisher = data_row[3]
-        #book.publisher = publishers[data_row[3]]
-        #publishers[data_row[3]].add_book(book)
+        book.publisher = publishers[data_row[3]]
+        #book.publisher = data_row[3]
+        publishers[data_row[3]].add_book(book)
 
-        book.author = data_row[4]
-        #book.author = authors[data_row[4]]
-        #authors[data_row[4]].add_book(book)
+        book.author = authors[data_row[4]]
+        #book.author = data_row[4]
+        authors[data_row[4]].add_book(book)
 
         book.description = data_row[5]
         book.imgurl = data_row[6]

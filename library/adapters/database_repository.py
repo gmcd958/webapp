@@ -168,7 +168,7 @@ class SqlAlchemyRepository(AbstractRepository):
             publisher_id = row[0]
             # Retrieve article ids of articles associated with the tag.
             book_ids = self._session_cm.session.execute(
-                    'SELECT books.id FROM publishers WHERE publisher_id = :publisher_id ORDER BY publisher_id ASC',
+                    'SELECT books.id FROM publishers WHERE publisher.id = :publisher.id ORDER BY publisher.id ASC',
                     {'publisher_id': publisher_id}
             ).fetchall()
             book_ids = [id[0] for id in book_ids]
