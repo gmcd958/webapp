@@ -196,17 +196,33 @@ class Book:
     def publisher(self) -> int:
         return self.__publisher
 
+    # @property
+    # def publisher(self) -> Publisher:
+    #     return self.__publisher
+
     @publisher.setter
     def publisher(self, publisher: int):
         self.__publisher = publisher
+
+    # @publisher.setter
+    # def publisher(self, publisher: Publisher):
+    #     self.__publisher = publisher
 
     @property
     def author(self) -> int:
         return self.__author
 
+    # @property
+    # def author(self) -> Author:
+    #     return self.__author
+
     @author.setter
     def author(self, author: int):
         self.__author = author
+
+    # @author.setter
+    # def author(self, author: Author):
+    #     self.__author = author
 
     @property
     def imgurl(self) -> str:
