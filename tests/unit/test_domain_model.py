@@ -11,6 +11,8 @@ def book():
         1997,
         'Harry Potter',
         1,
+        1,
+        1,
     )
 
 
@@ -57,9 +59,9 @@ def test_book_construction(book):
 
 
 def test_book_less_than_operator():
-    book_1 = Book(1999, None, 1)
+    book_1 = Book(1999, None, None, None, 1)
 
-    book_2 = Book(2000, None, 2)
+    book_2 = Book(2000, None, None, None, 2)
 
     assert book_1 < book_2
 

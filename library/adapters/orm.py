@@ -10,16 +10,16 @@ metadata = MetaData()
 
 users_table = Table(
     'users', metadata,
-    Column('id', Integer, primary_key=True),
+    Column('user_id', Integer, primary_key=True, autoincrement=True),
     Column('user_name', String(255), unique=True, nullable=False),
     Column('password', String(255), nullable=False)
 )
 
 reviews_table = Table(
     'reviews', metadata,
-    Column('id', Integer, primary_key=True),
-    Column('user_id', ForeignKey('users.id')),
-    Column('book_id', ForeignKey('books.id')),
+    Column('review_id', Integer, primary_key=True, autoincrement=True),
+    Column('user_id', ForeignKey('users.user_id')),
+    Column('book_id', ForeignKey('books.book_id')),
     Column('review_text', String(1024), nullable=False),
     Column('rating', Integer, nullable=False),
     Column('timestamp', DateTime, nullable=True)
@@ -27,42 +27,42 @@ reviews_table = Table(
 
 publishers_table = Table(
     'publishers', metadata,
-    Column('id', Integer, primary_key=True),
-    Column('name', String(255), nullable=False),
+    Column('publisher_id', Integer, primary_key=True, autoincrement=True),
+    Column('name', String(255), nullable=False)
 )
 
 authors_table = Table(
     'authors', metadata,
-    Column('id', Integer, primary_key=True),
-    Column('full_name', String(255), nullable=False),
+    Column('author_id', Integer, primary_key=True, autoincrement=True),
+    Column('full_name', String(255), nullable=False)
 )
 
 books_table = Table(
     'books', metadata,
-    Column('id', Integer, primary_key=True),
+    Column('book_id', Integer, primary_key=True, autoincrement=True),
     Column('title', String(255), nullable=False),
     Column('release_year', Integer, nullable=False),
-    #Column('publisher', Integer, nullable=False),
-    Column('publisher', ForeignKey('publishers.id')),
-    #Column('author', Integer, nullable=False),
-    Column('author', ForeignKey('authors.id')),
-    Column('description', String(1024), nullable=False),
-    Column('imgurl', String(1024), nullable=False),
+    Column('publisher', Integer, nullable=False),
+    #Column('publisher', ForeignKey('publishers.publisher_id')),
+    Column('author', Integer, nullable=False),
+    #Column('author', ForeignKey('authors.author_id')),
+    Column('description', String(1024), nullable=True),
+    Column('imgurl', String(1024), nullable=True),
     Column('ebook', Boolean, nullable=True),
     Column('num_pages', Integer, nullable=True)
 )
 
 genres_table = Table(
     'genres', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('genre_id', Integer, primary_key=True, autoincrement=True),
     Column('genre_name', String(255), nullable=False)
 )
 
 book_genres_table = Table(
     'book_genres', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('book_id', ForeignKey('books.id')),
-    Column('genre_id', ForeignKey('genres.id'))
+    Column('book_genres_id', Integer, primary_key=True, autoincrement=True),
+    Column('book_id', ForeignKey('books.book_id')),
+    Column('genre_id', ForeignKey('genres.genre_id'))
 )
 
 
@@ -78,14 +78,14 @@ def map_model_to_tables():
         '_Review__rating': reviews_table.c.rating
     })
     mapper(model.Book, books_table, properties={
-        '_Book__book_id': books_table.c.id,
+        '_Book__book_id': books_table.c.book_id,
         '_Book__title': books_table.c.title,
         '_Book__release_year': books_table.c.release_year,
         '_Book__description': books_table.c.description,
-        #'_Book__author':  books_table.c.author,
+        '_Book__author':  books_table.c.author,
         #'_Book__author':  relationship(model.Author, back_populates='_Author__books'),
-        #'_Book__publisher': books_table.c.publisher,
-        #'_Book__publisher': relationship(model.Publisher), #, back_populates='_Publisher__books'),
+        '_Book__publisher': books_table.c.publisher,
+        #'_Book__publisher': relationship(model.Publisher, back_populates='_Publisher__books'),
         '_Book__imgurl': books_table.c.imgurl,
         '_Book__ebook': books_table.c.ebook,
         '_Book__num_pages': books_table.c.num_pages,
@@ -93,14 +93,14 @@ def map_model_to_tables():
         '_Book__genres': relationship(model.Genre, secondary=book_genres_table, back_populates='_Genre__genre_books')
     })
     mapper(model.Publisher, publishers_table, properties={
-        '_Publisher__publisher_id': publishers_table.c.id,
+        '_Publisher__publisher_id': publishers_table.c.publisher_id,
         '_Publisher__name': publishers_table.c.name,
-        '_Publisher__books': relationship(model.Book, backref='_Book__publisher')
+        #'_Publisher__books': relationship(model.Book, backref='_Book__publisher')
     })
     mapper(model.Author, authors_table, properties={
-        '_Author__unique_id': authors_table.c.id,
+        '_Author__unique_id': authors_table.c.author_id,
         '_Author__full_name': authors_table.c.full_name,
-        '_Author__books': relationship(model.Book, backref='_Book__author')
+        #'_Author__books': relationship(model.Book, backref='_Book__author')
     })
     mapper(model.Genre, genres_table, properties={
         '_Genre__genre_name': genres_table.c.genre_name,

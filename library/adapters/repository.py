@@ -138,12 +138,22 @@ class AbstractRepository(abc.ABC):
     def add_author(self, author: Author):
         raise NotImplementedError
 
+    # @abc.abstractmethod
+    # def get_author(self, author_id: int) -> Author:
+    #     """ Returns Author with id from the repository."""
+    #     raise NotImplementedError
+
     @abc.abstractmethod
     def get_authors(self) -> List[Author]:
         raise NotImplementedError
 
     def add_publisher(self, publisher):
         raise NotImplementedError
+
+    # @abc.abstractmethod
+    # def get_publisher(self, publisher_id: int) -> Publisher:
+    #     """ Returns Author with id from the repository."""
+    #     raise NotImplementedError
 
     @abc.abstractmethod
     def get_publishers(self) -> List[Publisher]:

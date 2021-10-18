@@ -6,6 +6,7 @@ from library.authentication.services import AuthenticationException
 from library.book import services as book_services
 from library.authentication import services as auth_services
 from library.book.services import NonExistentBookException
+from library.domain.model import Author
 
 
 def test_can_add_user(in_memory_repo):
@@ -97,7 +98,7 @@ def test_can_get_book(in_memory_repo):
     assert book_as_dict['release_year'] == 1987
     assert book_as_dict['title'] == 'The House of Memory'
     assert book_as_dict['imgurl'] == 'https://images.gr-assets.com/books/1493114742m/33394837.jpg'
-    assert book_as_dict['author_id'] == '1'
+    assert book_as_dict['author_id'] == 1
     assert book_as_dict['description'] == 'Bad book no publisher'
     assert len(book_as_dict['reviews']) == 1
 

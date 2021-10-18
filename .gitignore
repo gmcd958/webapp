@@ -1,5 +1,6 @@
 # library database
 library.db
+library-test.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

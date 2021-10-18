@@ -142,7 +142,7 @@ class Author:
 
 
 class Book:
-    def __init__(self, release_year: int, book_title: str = None, book_id: int = None):
+    def __init__(self, release_year: int, book_title: str = None, book_publisher: int = None, book_author: int = None, book_id: int = None):
 
         self.__book_id: int = book_id
         self.__release_year: int = release_year
@@ -153,9 +153,9 @@ class Book:
         self.__reviews: List[Review] = list()
         self.__genres: List[Genre] = list()
 
-        self.__author = None
+        self.__author = book_author
         self.__description = None
-        self.__publisher = None
+        self.__publisher = book_publisher
         self.__imgurl = None
         self.__ebook = None
         self.__num_pages = None
@@ -192,37 +192,37 @@ class Book:
         if isinstance(description, str):
             self.__description = description.strip()
 
-    # @property
-    # def publisher(self) -> int:
-    #     return self.__publisher
-
     @property
-    def publisher(self) -> Publisher:
+    def publisher(self) -> int:
         return self.__publisher
+
+    # @property
+    # def publisher(self) -> Publisher:
+    #     return self.__publisher
 
     # @publisher.setter
     # def publisher(self, publisher: int):
     #     self.__publisher = publisher
 
-    @publisher.setter
-    def publisher(self, publisher: Publisher):
-        self.__publisher = publisher
-
-    # @property
-    # def author(self) -> int:
-    #     return self.__author
+    # @publisher.setter
+    # def publisher(self, publisher: Publisher):
+    #     self.__publisher = publisher
 
     @property
-    def author(self) -> Author:
+    def author(self) -> int:
         return self.__author
+
+    # @property
+    # def author(self) -> Author:
+    #     return self.__author
 
     # @author.setter
     # def author(self, author: int):
     #     self.__author = author
 
-    @author.setter
-    def author(self, author: Author):
-        self.__author = author
+    # @author.setter
+    # def author(self, author: Author):
+    #     self.__author = author
 
     @property
     def imgurl(self) -> str:
@@ -498,3 +498,14 @@ def make_review(review_text: str, user: User, book: Book, rating: int):
     book.add_review(review)
 
     return review
+
+
+def make_book(book_id: int, release_year: int, book_title: str, book_publisher: int, book_author: int, book_description: str, book_imgurl: str):
+    book = Book(release_year, book_title, book_publisher, book_author, book_id)
+    book.description = book_description
+    book.imgurl = book_imgurl
+
+    #book_author.add_book(book)
+    #book_publisher.add_book(book)
+
+    return book

@@ -7,8 +7,6 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.orm import scoped_session
 from flask import _app_ctx_stack
 
-# from covid.domain.model import User, Article, Comment, Tag
-
 from library.domain.model import Publisher, Author, Book, Review, User, Genre
 from library.adapters.repository import AbstractRepository
 
@@ -119,7 +117,7 @@ class SqlAlchemyRepository(AbstractRepository):
         book_ids = []
 
         # Use native SQL to retrieve article ids, since there is no mapped class for the article_tags table.
-        row = self._session_cm.session.execute('SELECT id FROM genres WHERE genre_name = :genre_name', {'genre_name': genre_name}).fetchone()
+        row = self._session_cm.session.execute('SELECT genre_id FROM genres WHERE genre_name = :genre_name', {'genre_name': genre_name}).fetchone()
 
         if row is None:
             # No tag with the name tag_name - create an empty list.
@@ -139,7 +137,7 @@ class SqlAlchemyRepository(AbstractRepository):
         book_ids = []
 
         # Use native SQL to retrieve article ids, since there is no mapped class for the article_tags table.
-        row = self._session_cm.session.execute('SELECT id FROM authors WHERE authors.full_name = :authors.full_name', {'authors.full_name': author_name}).fetchone()
+        row = self._session_cm.session.execute('SELECT authors.id FROM authors WHERE author.full_name = :author.full_name',{'author.full_name': author_name}).fetchall()
 
         if row is None:
             # No tag with the name tag_name - create an empty list.
@@ -198,6 +196,16 @@ class SqlAlchemyRepository(AbstractRepository):
             scm.session.add(author)
             scm.commit()
 
+    # def get_author(self, author_id: int) -> Author:
+    #     author = None
+    #     try:
+    #         author = self._session_cm.session.query(Author).filter(Author._Author__unique_id == author_id).one()
+    #     except NoResultFound:
+    #         # Ignore any exception and return None.
+    #         pass
+    #
+    #     return author
+
     def get_authors(self) -> List[Author]:
         authors = self._session_cm.session.query(Author).all()
         return authors
@@ -206,6 +214,16 @@ class SqlAlchemyRepository(AbstractRepository):
         with self._session_cm as scm:
             scm.session.add(publisher)
             scm.commit()
+
+    # def get_publisher(self, publisher_id: int) -> Publisher:
+    #     publisher = None
+    #     try:
+    #         publisher = self._session_cm.session.query(Publisher).filter(Publisher._Publisher__publisher_id == publisher_id).one()
+    #     except NoResultFound:
+    #         # Ignore any exception and return None.
+    #         pass
+    #
+    #     return publisher
 
     def get_publishers(self) -> List[Publisher]:
         publishers = self._session_cm.session.query(Publisher).all()

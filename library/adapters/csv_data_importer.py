@@ -4,7 +4,7 @@ from pathlib import Path
 from werkzeug.security import generate_password_hash
 
 from library.adapters.repository import AbstractRepository
-from library.domain.model import Publisher, Author, Book, User, Genre, make_genre_association, make_review
+from library.domain.model import Publisher, Author, Book, User, Genre, make_genre_association, make_review, make_book
 
 
 def read_csv_file(filename: str):
@@ -69,22 +69,15 @@ def load_books_and_genres(data_path: Path, repo: AbstractRepository, authors, pu
         del data_row[-number_of_genres:]
 
         # Create Book object.
-        book = Book(
+        book = make_book(
             book_id=book_id,
             release_year=int(data_row[1]),
             book_title=data_row[2],
+            book_publisher=int(data_row[3]),
+            book_author=int(data_row[4]),
+            book_description=data_row[5],
+            book_imgurl=data_row[6]
         )
-
-        book.publisher = publishers[data_row[3]]
-        #book.publisher = data_row[3]
-        publishers[data_row[3]].add_book(book)
-
-        book.author = authors[data_row[4]]
-        #book.author = data_row[4]
-        authors[data_row[4]].add_book(book)
-
-        book.description = data_row[5]
-        book.imgurl = data_row[6]
 
         repo.add_book(book)
 

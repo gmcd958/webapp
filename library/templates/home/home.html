@@ -1,15 +1,20 @@
 {% extends 'layout.html' %} {% block content %}
 <main id="main">
   <h3>
-    Welcome to my book catalogue.
+    Welcome to my book catalogue.  Please use the left hand navigation panel to browse through my collection of books.
   </h3>
   <br>
-  <h3>
-    Please use the left hand navigation panel to browse through my collection of books.
-  </h3>
   <br>
-  <h3>
-    Please note that the authors do not match the book cover image. This is because I wanted to show collections of books from one author, but all the books from the initial data set I chose have different authors. This is intentional :)
-  </h3>
+  <h1>
+    Markers please read
+  </h1>
+  <br>
+  <p>
+  I ran into problems when creating relationships between the books and their author/publisher. I got the error saying that the author/publisher column was not mapped in the Book->books table. I tried debugging my unit tests to see if I could understand what was going wrong, but wasn’t able to figure it out through there. I had SQL_ECHO and TESTING set to true in the env file and spent a long time trying to configure the relationship to allow for books to have authors/publishers. Using print statements in my code, I noticed the error came from my csv_data_importer where the author/publisher was added to the book and vice versa. However, I could not get this relationship to work in my program.
+  </p>
+  <br>
+  <p>
+  In the end I have opted for a work around to this problem to allow the database to fully populate. I have omitted the relationship between books and their author/publisher and instead have the books containing the author/publisher ids. This means the website is functioning but browsing by author and publisher is not possible because of the lack of relationship. Please take this into consideration when marking as I believe the rest of my code is correct.
+  </p>
 </main>
 {% endblock %}
